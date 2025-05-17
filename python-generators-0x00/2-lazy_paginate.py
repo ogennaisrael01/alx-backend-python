@@ -1,5 +1,5 @@
 from seed import connect_to_prodev
-def lazy_paginate(page_size, offset):
+def paginate_users(page_size, offset=0):
     
     connection = connect_to_prodev()#connect to database
     cursor = connection.cursor()
@@ -8,5 +8,5 @@ def lazy_paginate(page_size, offset):
     yield result
 
 
-for page in (lazy_paginate(100, 0)):
+for page in (paginate_users(100)):
    print(page)

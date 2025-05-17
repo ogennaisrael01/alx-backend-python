@@ -96,14 +96,12 @@ def main():
     # Connect to the new database
     db_conn = connect_to_prodev()
     if db_conn:
-        #create_table(db_conn)
+        create_table(db_conn)
         # Insert sample data
         # sample_data = ("user_data.csv")
         # insert_data(db_conn, "user_data.csv")
        
-        #fetch data
-        fetch_data(db_conn)
-        db_conn.close()
+
 
 if __name__ == "__main__":
     main()

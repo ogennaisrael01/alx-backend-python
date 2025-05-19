@@ -8,9 +8,7 @@ def stream_users_in_batches(batch_size):
     offset = 0
     while True:
         print("grouping in batch")
-        cursor.execute(
-            "SELECT * FROM user_data ORDER BY user_id LIMIT %s OFFSET %s", (batch_size, offset)
-        )
+        cursor.execute(f"SELECT * FROM user_data ORDER BY user_id LIMIT {batch_size} OFFSET{offset}")
         rows = cursor.fetchall()
         if not rows:
             break
@@ -36,9 +34,7 @@ def batch_processing(batch_size):
     offset = 0
     batches = []
     while True:
-        cursor.execute(
-            "SELECT * FROM user_data WHERE user_data.age > 25  ORDER BY user_id LIMIT %s OFFSET %s ", (batch_size, offset)
-        )
+        cursor.execute(f"SELECT * FROM user_data WHERE user_data.age > 25  ORDER BY user_id LIMIT{batch_size}  OFFSET{offset}")
         rows = cursor.fetchall()
         if not rows:
             break

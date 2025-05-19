@@ -1,25 +1,19 @@
-import pymysql
+from seed import connect_to_prodev
 from pymysql import Error
 
 def stream_users():
-    conn = pymysql.connect(
-        host='localhost',
-        user='root',
-        password='193782',
-        database='ALX_prodev'
-    )
-    cursor = conn.cursor()
-    try:
-        cursor.execute("""SELECT * FROM user_data LIMIT 6;""")
-        for row in cursor:
-            yield({
-                'Name': row[1],
-                'email': row[2],
-                'Age': row[3]
-            })
-    except pymysql.Error as error:
-        print(f"can't load file {error}")
+    connection = connect_to_prodev()
+    cursor = connection.cursor()
 
+    cursor.execute("""SELECT * FROM user_data LIMIT 6;""")
+    for row in cursor:
+        yield({
+            'Name': row[1],
+            'email': row[2],
+            'Age': row[3]
+        })
+    cursor.close()
+    connection.close()
 count_row = stream_users()
-for row in (count_row):
+for row in count_row:
     print(row)

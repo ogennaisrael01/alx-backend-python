@@ -6,7 +6,7 @@ def paginate_users(page_size, offset=0):
     cursor.execute(f"SELECT * FROM user_data LIMIT {page_size} OFFSET {offset}")
     result = cursor.fetchall()
     yield result
-
+    cursor.close()
 
 for page in (paginate_users(100)):
    print(page)

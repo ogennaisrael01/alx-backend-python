@@ -9,8 +9,13 @@ def stream_user_ages():
         yield(
             {'Age': age_row}
             )
+        
+    cursor.close()
+
 for row in stream_user_ages():
     print(row)
+
+
 
 
 def calculate_average():
@@ -25,5 +30,5 @@ def calculate_average():
         count += 1
     average = total / count if count > 0 else 0
     print({'Average_age': average})
-        
+    cursor.close()    
 calculate_average()

@@ -16,7 +16,7 @@ def connect_db():
         print(f"Error connecting the server: {error}")
         return None
         
-
+    conn.close()
 
 # Create database
 def create_database(connection):
@@ -29,6 +29,7 @@ def create_database(connection):
 
     except pymysql.Error as error:
         print("database exits")
+    cursor.close()
 
 # connect to database
 def connect_to_prodev():
@@ -44,7 +45,7 @@ def connect_to_prodev():
     except pymysql.Error as error:
         print(f"error in connecting to database {error}")
         return None
-
+    conn.close()
 # creaate table
 def create_table(connection):
     try:

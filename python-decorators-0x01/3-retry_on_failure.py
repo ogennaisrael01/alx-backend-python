@@ -30,7 +30,7 @@ def retry_on_failure(retries=3, delay=2):
                     time.sleep(delay)
                 attempts += 1
             if sqlite3.Error:
-                print("Can't load databasae..")
+                print("Can't load ..")
         return wrapper
     return decorator
 

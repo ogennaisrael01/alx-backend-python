@@ -16,17 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from chats.views import ConversationViewSet, MessageViewSet
 
-# Create a router and register our viewsets with it
-router = DefaultRouter()
-router.register(r'conversation', ConversationViewSet)  # Routes for conversation endpoints
-router.register(r'messages', MessageViewSet)           # Routes for messages endpoints
 
-# The API URLs are now determined automatically by the router
 urlpatterns = [
     path('admin/', admin.site.urls),         # Admin site
-    path('api/', include(router.urls)),  # API endpoints for conversations and messages
-    path('api-auth/', include('rest_framework.urls')) #auth endpoint   
+    path('api-auth/', include('rest_framework.urls')), #auth endpoint
+    path('api/', include('chats.urls'))  # app url 
 ]

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'chats',
     'rest_framework',
+    'django_filters',
     
 
     'django.contrib.admin',
@@ -72,7 +73,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'messaging_app.wsgi.application'
-AUTH_USER_MODEL = 'chats.User'
+AUTH_USER_MODEL = 'chats.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -136,4 +137,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ]
 }

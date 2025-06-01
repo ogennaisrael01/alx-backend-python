@@ -1,23 +1,22 @@
 from rest_framework import serializers
-from .models import User, Conversation, Messages
+from .models import CustomUser, Conversation, Messages
+from rest_framework.serializers import ValidationError, SerializerMethodField
 
 # Serializer for the custom User model
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)  # Password should not be readable
     class Meta:
-        model = User
-        fields = ["id", "username", "date_joined", "email", "password"]
+        model = CustomUser
+        fields = ["user_id", "username", "date_joined", "email"]
 
 # Serializer for the Messages model
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Messages
-        fields = ["id", "conversation", "content", "date_created", "sender"]
+        fields = ["message_id", "conversation", "message_body", "sent_by"]
 
 # Serializer for the Conversation model, includes nested messages
 class ConversationSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, read_only=True)  # Nested messages in the conversation
-
     class Meta:
         model = Conversation
-        fields = ["id", "title", "participants", "created_at", "messages"]
+        fields = ["conversation_id", "title", "participants", "created_at", "messages"]

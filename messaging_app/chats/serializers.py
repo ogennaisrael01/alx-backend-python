@@ -16,13 +16,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 # Serializer for the Messages model
 class MessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer(many=True, read_only=True)
     class Meta:
         model = Messages
-        fields = ["message_id", "conversation", "message_body", "sent_by"]
+        fields = ["message_id", "conversation", "message_body", "sender"]
 
 # Serializer for the Conversation model, includes nested messages
 class ConversationSerializer(serializers.ModelSerializer):
-    messages = MessageSerializer(many=True, read_only=True)  # Nested messages in the conversation
+    messages = MessageSerializer(many=True, read_only=True) # Nested messages in the conversation
+    participants = UserSerializer(many=True, read_only=True)
     class Meta:
         model = Conversation
         fields = ["conversation_id", "title", "participants", "created_at", "messages"]

@@ -5,11 +5,6 @@ from django.contrib.auth.models import AbstractUser
 # Custom user model extending Django's AbstractUser
 class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.CharField(unique=True)
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
-    password = models.CharField(unique=True)
-    user_name = models.CharField(max_length=64)
     phone_number = models.CharField( max_length=64)
     date_joined = models.DateTimeField(auto_now_add=True)
     

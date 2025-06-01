@@ -69,4 +69,4 @@ Access the Django admin at `/admin/`.
 
 ## License
 
-MIT License
+Educational purposes

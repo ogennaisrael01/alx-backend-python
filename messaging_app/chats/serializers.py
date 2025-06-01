@@ -4,9 +4,15 @@ from rest_framework.serializers import ValidationError, SerializerMethodField
 
 # Serializer for the custom User model
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(required=True, max_length=15)
     class Meta:
         model = User
-        fields = ["user_id", "username", "date_joined", "email"]
+        fields = ["username", "date_joined", "email", "password"]
+
+    def validate_password(self, value):
+        if not value:
+            raise ValidationError("Enter your password")
+        return value
 
 # Serializer for the Messages model
 class MessageSerializer(serializers.ModelSerializer):

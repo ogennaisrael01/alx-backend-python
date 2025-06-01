@@ -4,16 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Custom user model extending Django's AbstractUser
 class User(AbstractUser):
-    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(unique=True)
-    username = models.CharField(max_length=100, unique=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    date_joined = models.DateField(auto_now_add=True)
-    phone_number = models.CharField(max_length=15)
-    password = models.CharField(max_length=20)
+    phone_number = models.CharField( max_length=64)
     
     def __str__(self):
         return self.username
@@ -23,7 +14,7 @@ class User(AbstractUser):
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     participants = models.ManyToManyField(User, related_name="conversations")  # Users in the conversation
-    title = models.TextField(default="")  # Optional title for the conversation
+    title = models.TextField(default="start conversation")  # Optional title for the conversation
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for creation
 
     def __str__(self):

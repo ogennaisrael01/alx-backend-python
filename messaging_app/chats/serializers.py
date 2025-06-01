@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import CustomUser, Conversation, Messages
+from .models import User, Conversation, Messages
 from rest_framework.serializers import ValidationError, SerializerMethodField
 
 # Serializer for the custom User model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ["user_id", "username", "date_joined", "email"]
 
 # Serializer for the Messages model

@@ -20,6 +20,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),         # Admin site
-    path('api-auth/', include('rest_framework.urls')), #auth endpoint
     path('api/', include('chats.urls'))  # app url 
 ]

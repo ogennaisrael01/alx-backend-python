@@ -50,7 +50,8 @@ messaging_app/
 
 4. **Create a superuser:**
    ```sh
-   python manage.py createsuperuser
+   python manage.py createsuper
+   
    ```
 
 5. **Run the development server:**

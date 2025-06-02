@@ -11,5 +11,4 @@ router.register(r'messages', MessageViewSet) # Routes for messages endpoints
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls')),
 ]

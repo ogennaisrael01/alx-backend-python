@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["username", "date_joined", "email", "password"]
 
     def validate_password(self, value):
-        if not value:
+        if not value[self.password]:
             raise ValidationError("Enter your password")
         return value
 

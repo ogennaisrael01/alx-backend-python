@@ -12,3 +12,5 @@ router.register(r'messages', MessageViewSet) # Routes for messages endpoints
 urlpatterns = [
     path('', include(router.urls)),
 ]
+
+

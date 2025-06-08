@@ -27,7 +27,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         conversation_id = self.request.query_params.get('conversation_id', None)
 
         if conversation_id is not None:
-            queryset = queryset.filter(conversation__conversation_id=conversation_id)
+            queryset = Messages.objects.filter(conversation__conversation_id=conversation_id)
             # Check if the user is a participant of the conversation
                   
             convesation  = get_object_or_404(Conversation, conversation_id=conversation_id)

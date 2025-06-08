@@ -1,7 +1,8 @@
 from rest_framework import permissions
 class IsParticipantOfConversation(permissions.BasePermission):
     """
-    Custom permission to only allow owners of an object to edit it.
+    Custom permission to only allow participants of a conversation to access it.
+    All CRUD operations (GET, POST, PUT, DELETE) are allowed for participants.
     """
     def has_permission(self, request, view):
         # Check if the user is authenticated

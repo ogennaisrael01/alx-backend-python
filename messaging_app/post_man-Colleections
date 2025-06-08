@@ -14,7 +14,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"username\": \"your_username\",\n  \"password\": \"your_password\"\n}"
+					"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"0987poiu\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8000/api/token/",
@@ -55,7 +55,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"title\": \"Test Conversation\",\n  \"participants\": [\"user_id1\", \"user_id2\"]\n}"
+					"raw": "{\n  \"title\": \"Test Conversation\",\n  \"participants\": [\"admin\", \"ogenna\"]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8000/api/conversation/",
@@ -76,7 +76,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"conversation\": \"conversation_id\",\n  \"message_body\": \"Hello, world!\"\n}"
+					"raw": "{\n  \"conversation\": \"conversation_id\",\n  \"message_body\": \"Test message!\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8000/api/messages/",

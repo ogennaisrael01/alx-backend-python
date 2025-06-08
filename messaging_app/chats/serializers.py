@@ -4,7 +4,7 @@ from rest_framework.serializers import ValidationError, SerializerMethodField
 
 # Serializer for the custom User model
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(required=True, max_length=15)
+    password = serializers.CharField(write_only=True, required=True, max_length=15)
     class Meta:
         model = User
         fields = ["username", "date_joined", "email", "password"]
@@ -16,12 +16,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 # Serializer for the Messages model
 class MessageSerializer(serializers.ModelSerializer):
-    sender = UserSerializer(many=True, read_only=True)
+    sent_by = UserSerializer(read_only=True)
     class Meta:
         model = Messages
-        fields = ["message_id", "conversation", "message_body", "sender"]
-        read_only_fields = ["message_id", "sent_at"]  # Make message_id and sent_at read-only
-
+        fields = ["message_id", "conversation", "message_body", "sent_by", "sent_at"]
+        
     def validate_message_body(self, obj):
         if not obj:
             raise ValidationError("Message body cannot be empty")

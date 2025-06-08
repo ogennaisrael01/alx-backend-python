@@ -7,6 +7,13 @@ class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone_number = models.CharField( max_length=64)
     date_joined = models.DateTimeField(auto_now_add=True)
+
+    USERNAME_FIELD = 'username'  # Specify the field to use for authentication
+    REQUIRED_FIELDS = ['email']  # Specify additional fields required for user creation
+    
+    @property
+    def id(self):
+        return self.user_id
     
     def __str__(self):
         return self.username

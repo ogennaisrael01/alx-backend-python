@@ -28,8 +28,8 @@ class RestrictAccessByTimeMiddleware:
         self.get_response = get_response
 
     def __call__ (self, request):
-        time = datetime.now().hour()
-
+        time = datetime.now().hour
+        # Restrict access from 9 PM to 6 Am
         if time >= 21 and time <= 6:
             print(f"Cant access chat from from  9pm to 6am", status=404)
 
@@ -78,7 +78,7 @@ class RolepermissionMiddleware:
     def __call__(self, request):
         user = request.user
         # Check if the user is authenticated and has the required role
-        if user.IsAuthenticated and (user.role not in self.allowed_roles):
+        if user.is_authenticated and (user.role not in self.allowed_roles):
             return f"Access denied: this action requires {self.allowed_roles} privilages"
 
         return self.get_response(request)

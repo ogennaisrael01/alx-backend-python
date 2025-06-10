@@ -4,10 +4,20 @@ from django.contrib.auth.models import AbstractUser
 
 # Custom user model extending Django's AbstractUser
 class User(AbstractUser):
+    # Define choices for user roles
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('user', 'User'),
+        ('moderator', 'Moderator'),
+        ('guest', 'Guest'),
+    ]
+
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone_number = models.CharField( max_length=64)
     date_joined = models.DateTimeField(auto_now_add=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
 
+    
     USERNAME_FIELD = 'username'  # Specify the field to use for authentication
     REQUIRED_FIELDS = ['email']  # Specify additional fields required for user creation
     
@@ -21,11 +31,13 @@ class User(AbstractUser):
 
 # Model representing a conversation between users
 class Conversation(models.Model):
+    
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     participants = models.ManyToManyField(User, related_name="conversations")  # Users in the conversation
     title = models.TextField(default="start convasation")  # Optional title for the conversation
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for creation
-
+    # In your User model
+    
     def __str__(self):
         return self.title
 

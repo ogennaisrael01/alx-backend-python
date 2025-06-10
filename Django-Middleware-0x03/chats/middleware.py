@@ -1,6 +1,6 @@
 from datetime import datetime
 
-class RequestLogingMiddleware:
+class RequestLoggingMiddleware:
     """
     A middleware that logs each user’s requests to a file, including the timestamp, user and the request path
     """

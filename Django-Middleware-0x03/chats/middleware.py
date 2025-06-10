@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+from django.http import HttpResponseForbidden
 class RequestLoggingMiddleware:
     """
     A middleware that logs each user’s requests to a file, including the timestamp, user and the request path
@@ -73,12 +73,12 @@ class RolepermissionMiddleware:
     """
     def __init__(self, get_response):
             self.get_response = get_response
-            self.allowed_roles = ["admin", "moderator"]
+            self.allowed_roles = ["admin", "moderator", "user"]  # Define the roles that are allowed to access certain actions
 
     def __call__(self, request):
         user = request.user
         # Check if the user is authenticated and has the required role
         if user.is_authenticated and (user.role not in self.allowed_roles):
-            return f"Access denied: this action requires {self.allowed_roles} privilages"
+            return HttpResponseForbidden(f"Access denied: this action requires {self.allowed_roles} privileges.")
 
         return self.get_response(request)

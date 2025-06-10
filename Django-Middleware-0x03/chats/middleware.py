@@ -19,3 +19,18 @@ class RequestLoggingMiddleware:
             log_file.write(log_entry)
 
         return self.get_response(request)
+    
+class RestrictAccessByTimeMiddleware:
+    """
+    A middleware that restricts access to the messaging up during certain hours of the day
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__ (self, request):
+        time = datetime.now().hour()
+
+        if time >= 21 and time <= 6:
+            print(f"Cant access chat from from  9pm to 6am", status=404)
+            
+        return self.get_response(request)

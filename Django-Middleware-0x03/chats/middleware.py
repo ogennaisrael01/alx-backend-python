@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class RequestLoggingMiddleware:
     """
@@ -32,5 +32,37 @@ class RestrictAccessByTimeMiddleware:
 
         if time >= 21 and time <= 6:
             print(f"Cant access chat from from  9pm to 6am", status=404)
-            
+
         return self.get_response(request)
+
+class OffensiveLanguageMiddleware:
+    """
+    A middleware that limits the number of chat messages a user can send within a certain time window, based on their IP address.
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.message_count = {}
+
+    def __call__(self, request):
+        user_ip = request.META.get('REMOTE_ADDR')
+        current_time = datetime.now()
+
+        # Initialize the message count for the user if not already present
+        if user_ip not in self.message_count:
+            self.message_count[user_ip] = {'count': 0, 'last_reset': current_time}
+
+        # Reset the count if more than 1 minute has passed
+        if current_time - self.message_count[user_ip]['last_reset'] > timedelta(minutes=1):
+            self.message_count[user_ip] = {'count': 0, 'last_reset': current_time}
+
+        # Increment the count for the current user
+        self.message_count[user_ip]['count'] += 1
+
+        # Check if the user has exceeded the limit of 5 messages in the last minute
+        if self.message_count[user_ip]['count'] > 5:
+            print(f"Too many messages from {user_ip}. Please wait before sending more messages.")
+            return None
+        
+        response = self.get_response(request)
+        return response
+    

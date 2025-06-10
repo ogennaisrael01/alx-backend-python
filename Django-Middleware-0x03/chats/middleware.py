@@ -60,9 +60,25 @@ class OffensiveLanguageMiddleware:
 
         # Check if the user has exceeded the limit of 5 messages in the last minute
         if self.message_count[user_ip]['count'] > 5:
-            print(f"Too many messages from {user_ip}. Please wait before sending more messages.")
+            return (f"Too many messages from {user_ip}. Please wait before sending more messages.")
             return None
         
         response = self.get_response(request)
         return response
     
+
+class RolepermissionMiddleware:
+    """
+    A middleware that checks the user’s role i.e admin, before allowing access to specific actions
+    """
+    def __init__(self, get_response):
+            self.get_response = get_response
+            self.allowed_roles = ["admin", "moderator"]
+
+    def __call__(self, request):
+        user = request.user
+        # Check if the user is authenticated and has the required role
+        if user.IsAuthenticated and (user.role not in self.allowed_roles):
+            return f"Access denied: this action requires {self.allowed_roles} privilages"
+
+        return self.get_response(request)

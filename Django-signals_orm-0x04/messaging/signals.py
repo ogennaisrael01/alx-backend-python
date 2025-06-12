@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 from messaging.models import Message, Notification, MessageHistory
 
 @receiver(post_save, sender=Message, weak=False, dispatch_uid="Send a message")
@@ -26,8 +27,9 @@ def edit_message_signal(sender, instance, **kwargs):
     else:
         print(f"Message created by {instance.sender} to {instance.receiver} at {instance.timestamp}")
 
-@receiver(post_delete, sender=Message, weak=False, dispatch_uid="Delete a message")
+@receiver(post_delete, sender=User, weak=False, dispatch_uid="Delete user messages")
 def delete_message_signal(sender, instance, **kwargs):
-    print(f"Message deleted by {instance.sender} at ({instance.timestamp})")
-    # No need to delete again; the object is already deleted.
+    Message.objects.filter(sender=instance).delete()
+    Message.objects.filter(receiver=instance).delete()
+    print(f"Messages deleted for user {instance.username}")
 

@@ -16,9 +16,10 @@ class Message(models.Model):
 
 class Notification(models.Model):
     notification_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')  # User who receives the notification
-    notification = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='notifications')  # Link to the message that triggered the notification
-    timestamp = models.DateTimeField(auto_now_add=True)  # Automatically set the timestamp when the notification is created
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')  
+    content = models.TextField()
+    notification = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='notifications')  
+    timestamp = models.DateTimeField(auto_now_add=True)  #
 
     def __str__(self):
         return f"Notification for {self.user.username} at {self.timestamp}"

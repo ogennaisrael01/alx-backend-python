@@ -10,7 +10,7 @@ class Message(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciever')    
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)  # Automatically set the timestamp when the message is created
-
+    edited = models.BooleanField(default=False)  # Field to track if the message has been edited
     def __str__(self):
         return f"Message from {self.sender.username} to {self.reciever.username} at {self.timestamp}: {self.message}"
 

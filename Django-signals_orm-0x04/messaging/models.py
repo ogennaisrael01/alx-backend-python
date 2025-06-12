@@ -7,8 +7,8 @@ import uuid
 class Message(models.Model):
     messaging_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messaging') 
-    reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciever')    
-    message = models.TextField()
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciever')    
+    content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)  # Automatically set the timestamp when the message is created
 
     def __str__(self):

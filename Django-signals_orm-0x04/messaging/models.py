@@ -14,7 +14,7 @@ class Message(models.Model):
     def __str__(self):
         return f"Message from {self.sender.username} to {self.reciever.username} at {self.timestamp}: {self.message}"
 
-class Notificafication(models.Model):
+class Notification(models.Model):
     notification_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')  # User who receives the notification
     notification = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='notifications')  # Link to the message that triggered the notification

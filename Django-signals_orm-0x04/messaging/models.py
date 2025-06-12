@@ -23,3 +23,11 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.user.username} at {self.timestamp}"
+    
+class MessageHistory(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='edit_history')
+    edited_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='edited_messages')
+    edited_at = models.DateTimeField(auto_now_add=True)  # Automatically set the timestamp when the edit is made
+
+    def __str__(self):
+        return f"Edit history for message {self.message.messaging_id} at {self.edited_at}"

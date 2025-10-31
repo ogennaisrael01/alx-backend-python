@@ -12,7 +12,7 @@ def stream_users_in_batches(batch_size):
         return "Please connect to you database"
     cursor = connection.cursor()
     try:
-        query = "SELECT * FROM users"
+        query = "SELECT * FROM user_data"
         cursor.execute(query)
         result = cursor.fetchmany(size=batch_size)
         for row in result:

@@ -3,7 +3,7 @@ import seed
 def paginate_users(page_size, offset=0):
     connection = seed.connect_to_prodev()
     cursor = connection.cursor(dictionary=True)
-    cursor.execute(f"SELECT * FROM users LIMIT {page_size} OFFSET {offset}")
+    cursor.execute(f"SELECT * FROM user_data LIMIT {page_size} OFFSET {offset}")
     rows = cursor.fetchall()
     connection.close()
     return rows
@@ -11,7 +11,7 @@ def paginate_users(page_size, offset=0):
 
 def lazy_paginate(page_size, page=0):
     offset = page * page_size
-    for row in paginate_users(page_size=page_size, offset=offset):
+    for row in paginate_users(page_size, offset):
         yield row
 
 if __name__ == "__main__":

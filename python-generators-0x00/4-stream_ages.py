@@ -16,9 +16,11 @@ def ages():
         yield age
 
 if __name__ == "__main__":
-    save_ages_in_list = list()
+    total = 0
+    count = 0
     for row in ages():
-        save = int(row.get("age"))
-        save_ages_in_list.append(save)
-    avg = sum(save_ages_in_list) / len(save_ages_in_list)
-    print(f"Average age of users: {round(avg, 2)}")
+        age = int(row.get("age"))
+        total += age
+        count += 1
+    print(f"Average age of users : {round(total / count)}")
+        

@@ -4,7 +4,7 @@ import sys
 def stream_user_ages():
     connection = connect_to_prodev()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT u.age FROM users u "
+    query = "SELECT * FROM users"
     cursor.execute(query)
     result = cursor.fetchall()
     return result

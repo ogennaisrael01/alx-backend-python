@@ -41,7 +41,7 @@ def retry_on_failure(retries, delay):
                 if attempts < retries:
                     time.sleep(5) 
                 attempts += 1
-            return "Unknown error occured"
+            return f"Error occured, Check logs"
         return wrapper  
     return hold_func
 

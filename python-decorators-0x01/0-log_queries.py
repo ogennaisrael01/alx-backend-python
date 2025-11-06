@@ -1,7 +1,7 @@
 import sqlite3
 from sqlite3 import Connection
 import functools   
-import time 
+from datetime import datetime
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -10,15 +10,15 @@ logger = logging.getLogger(__name__)
 def log_queries(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        start = time.time()
+        start = datetime.now()
         query = kwargs.get("query")
         logging.info(f"funtion name: {func.__name__}")
         logging.info(f"Executing query: {query} ")
-        response = func(query)
+        response = func(*args, **kwargs)
 
-
-        duration = time.time() - start
-        logging.info(f"Execution time: {duration:2f}s")
+        end = datetime.now()
+        duration = end - start
+        logging.info(f"Execution time: {duration.total_seconds():.4f}s")
         return response
         
     return wrapper

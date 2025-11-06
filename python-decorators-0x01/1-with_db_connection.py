@@ -13,7 +13,8 @@ def with_db_connection(func):
                 response = func(connection, *args, **kwargs)
         except sqlite3.Error as e:
             raise ValueError(f"Error: {e}")
-
+        finally:
+            connection.close()
         return response
     return wrapper
 

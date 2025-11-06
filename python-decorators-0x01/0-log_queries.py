@@ -49,9 +49,9 @@ def fetch_all_users(query):
     return results
 
 if __name__ == "__main__":
-    # table = create_table(query="CREATE TABLE users (name VARCHAR(100), email VARCHAR(100), age INT)")
+    # table = create_table(query="CREATE TABLE users ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT UNIQUE, age INT) STRICT")
     # print(table)
-    query = "INSERT INTO users (name, email, age) VALUES ('ogenna', 'ogennaisrael@gmail.com', 21)"
-    seed = seed_db(query=query)
+    # query = "INSERT INTO users (name, email, age) VALUES ('ogenna', 'ogennaisrael@gmail.com', 21)"
+    # seed = seed_db(query=query)
     users = fetch_all_users(query="SELECT * FROM users")
     print(users)

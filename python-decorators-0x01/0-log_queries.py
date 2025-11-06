@@ -12,13 +12,13 @@ def log_queries(func):
     def wrapper(*args, **kwargs):
         start = time.time()
         query = kwargs.get("query")
-        print("funtion name:", func.__name__)
+        logging.info(f"funtion name: {func.__name__}")
         logging.info(f"Executing query: {query} ")
         response = func(query)
 
 
         duration = time.time() - start
-        print(f"Execution time: {duration:2f}s")
+        logging.info(f"Execution time: {duration:2f}s")
         return response
         
     return wrapper
@@ -31,6 +31,13 @@ def create_table(query):
     conn.commit()
     return "Tables created successfully"
 
+@log_queries
+def seed_db(query):
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    cursor.execute(query)
+    conn.commit()
+    return "Seeded db successfull"
 
 @log_queries
 def fetch_all_users(query):
@@ -44,5 +51,7 @@ def fetch_all_users(query):
 if __name__ == "__main__":
     # table = create_table(query="CREATE TABLE users (name VARCHAR(100), email VARCHAR(100), age INT)")
     # print(table)
+    query = "INSERT INTO users (name, email, age) VALUES ('ogenna', 'ogennaisrael@gmail.com', 21)"
+    seed = seed_db(query=query)
     users = fetch_all_users(query="SELECT * FROM users")
     print(users)

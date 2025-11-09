@@ -16,7 +16,10 @@ async def create_table():
     await cursor.execute("SELECT * FROM users")
     result = await cursor.fetchall()
     print("Executed sql query for fetching user data")
-    print(result)
+    await cursor.close()
+    await db.close()
+    return result
+
 
 
 

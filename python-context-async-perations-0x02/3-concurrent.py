@@ -10,7 +10,7 @@ async def connect_db():
     except aiosqlite.Error as e:
         raise ValueError(e)
 
-async def create_table():
+async def async_fetch_users():
     db = await connect_db()
     cursor = await db.cursor()
     await cursor.execute("SELECT * FROM users")
@@ -20,12 +20,23 @@ async def create_table():
     await db.close()
     return result
 
+async def async_fetch_older_users():
+    db = await  connect_db()
+    cursor =await db.cursor()
+    await cursor.execute("SELECT * FROM users WHERE age > 40")
+    result = await cursor.fetchall()
+    print("Fetched user data who's age are greater than 40")
+    await cursor.close()
+    await db.close()
+    return result
+
 
 
 
 async def main():
-    task = await asyncio.gather(connect_db(), create_table())
-    print(task)
+    result = await asyncio.gather(async_fetch_older_users(), async_fetch_users())
+    for task in result:
+        print(task)
 
 if __name__ == "__main__":   
     asyncio.run(main())

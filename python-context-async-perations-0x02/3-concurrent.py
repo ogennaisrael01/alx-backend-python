@@ -21,7 +21,7 @@ async def create_table():
 
 
 async def main():
-    task = await asyncio.gather(create_table())
+    task = await asyncio.gather(connect_db(), create_table())
     print(task)
 
 if __name__ == "__main__":   

@@ -28,7 +28,7 @@ def cache_query(func):
     def wrapper(*args, **kwargs):
         start = time.time()
         query = kwargs.get("query") if kwargs else None
-        if query in query_cache:
+        if query in query_cache.keys():
             logging.info(f"Duration {time.time() - start:.4f}s")
             return query_cache.get(query)
         else:

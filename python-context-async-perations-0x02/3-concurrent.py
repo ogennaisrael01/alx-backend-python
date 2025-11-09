@@ -33,10 +33,10 @@ async def async_fetch_older_users():
 
 
 
-async def main():
+async def fetch_concurrently():
     result = await asyncio.gather(async_fetch_older_users(), async_fetch_users())
     for task in result:
         print(task)
 
 if __name__ == "__main__":   
-    asyncio.run(main())
+    asyncio.run(fetch_concurrently())

@@ -18,7 +18,7 @@ ALLOWED_HOSTS = ["*"]
 AUTH_USER_MODEL = "chats.CustomUser"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASESS": [
+    "DEFAULT_AUTHENTICATION_CLASSES": [
         'rest_framework_simplejwt.authentication.JwtAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     ],

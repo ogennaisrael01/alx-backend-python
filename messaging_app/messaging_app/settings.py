@@ -19,10 +19,11 @@ AUTH_USER_MODEL = "chats.CustomUser"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASESS": [
-        'rest_framework_simplejwt.authentication.JwtAuthentication'
+        'rest_framework_simplejwt.authentication.JwtAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        "rest_frameeork.permissions.IsAuthenticated"
+        "rest_framework.permissions.IsAuthenticated"
     ]
 }
 

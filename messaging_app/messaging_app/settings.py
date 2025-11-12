@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'drf_yasg',
     'chats',
+    'django_filters',
     'rest_framework',
     'rest_framework_simplejwt',
 

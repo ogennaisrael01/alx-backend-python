@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.db.models  import Q
 from django.utils import timezone
+from django_filters import rest_framework as filters
 
 User = get_user_model()
 
@@ -30,6 +31,8 @@ class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = ConversationCreateSerailizer
     queryset = Conversation.objects.prefetch_related("messages")
     lookup_field = "pk"
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields  = ["name", "user__username", "messages__message_body", "created_at"]
 
     def perform_create(self, serializer):
        """ Save the serialized data setting the current user as the user who created the conversation"""

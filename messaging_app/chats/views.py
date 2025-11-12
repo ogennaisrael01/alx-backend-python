@@ -57,7 +57,7 @@ class ConservationViewset(viewsets.ModelViewSet):
     
 
     def list(self, request, *args, **kwargs):
-        """ Get all conversation where user is either host"""
+        """ Get all conversation where current user is the  host"""
         queryset = self.get_queryset()
         conversations = queryset.filter(user=request.user)
         serializer = ConversationSerializer(conversations, many=True)

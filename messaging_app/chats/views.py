@@ -125,6 +125,8 @@ class ConservationViewset(viewsets.ModelViewSet):
         """
         user_id = request.query_params.get("user_id")
         conversation_id = request.query_params.get("conversation_id")
+        strp_conversation_id = conversation_id.strip()
+        strp_user_id = user_id.strip()
         msg = ''
         if not user_id:
             msg += "provide the user id"
@@ -133,8 +135,8 @@ class ConservationViewset(viewsets.ModelViewSet):
             msg += "provide conversation id"
             return Response(msg)
 
-        user_obj = get_object_or_404(User, id=user_id)
-        conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+        user_obj = get_object_or_404(User, id=strp_user_id)
+        conversation_obj = get_object_or_404(Conversation, conversation_id=strp_conversation_id)
         try:
             if request.user != conversation_obj.user:
                 msg += "Can't perform this action"
@@ -156,7 +158,8 @@ class ConservationViewset(viewsets.ModelViewSet):
     
     def update(self, request, *args, **kwargs):
         conversation_id = kwargs.get("pk")
-        conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+        strp_conversation_id = conversation_id.strip()
+        conversation_obj = get_object_or_404(Conversation, conversation_id=strp_conversation_id)
         if request.user.id != conversation_obj.user.id:
             return Response(status=status.HTTP_403_FORBIDDEN, data={
                 "success": False,
@@ -173,7 +176,8 @@ class ConservationViewset(viewsets.ModelViewSet):
             )
     def retrieve(self, request, *args, **kwargs):
         conversation_id = kwargs.get("pk")
-        conversation = get_object_or_404(Conversation, conversation_id=conversation_id, user=request.user)
+        strp_conversation_id = conversation_id.strip()
+        conversation = get_object_or_404(Conversation, conversation_id=strp_conversation_id, user=request.user)
         print(conversation)
         serializer = ConversationSerializer(conversation)
         return Response(status=status.HTTP_200_OK, data={
@@ -184,7 +188,8 @@ class ConservationViewset(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         conversation_id = kwargs.get("pk")
-        conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+        strp_conversation_id = conversation_id.strip()
+        conversation_obj = get_object_or_404(Conversation, conversation_id=strp_conversation_id)
         if conversation_obj.user == request.user:
             conversation_obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -201,9 +206,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         conversation_id = kwargs.get("conversation_pk") 
-        print(len(conversation_id))
         strp_conversation_id = conversation_id.strip()
-        print(len(strp_conversation_id))
         msg = ''
         if not strp_conversation_id:
             msg += "please provide the conversation id"
@@ -229,4 +232,5 @@ class MessageViewSet(viewsets.ModelViewSet):
                 "message_body": serializer.validated_data 
             }
         )
-        
+
+         

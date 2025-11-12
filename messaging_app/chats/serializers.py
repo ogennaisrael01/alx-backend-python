@@ -98,3 +98,25 @@ class ConversationSerializer(serializers.ModelSerializer):
                 "message": last_msg.message_body
             }
         return None
+
+
+class MessageCreate(serializers.Serializer):
+    message_body = serializers.CharField(max_length=500, 
+                                         error_messages={
+                                             "blank": "Message cannot be blank", 
+                                             "required": "message body id required to send to a message"
+                                             }
+                                             )  
+    def validate_message_body(self, value: str):
+        if len(value) < 2:
+            raise serializers.ValidationError("message Body coan't be below two characters")
+        return value
+
+    def create(self, validated_data):
+        message = Messages.objects.create(**validated_data)
+        return message
+    
+    def update(self, instance, validated_data):
+        instance.message_body = validated_data.get("message_body", instance.message_body)
+        instance.save()
+        return instance

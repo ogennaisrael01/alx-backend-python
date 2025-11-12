@@ -1,6 +1,13 @@
-from django.shortcuts import render
+
 from rest_framework import viewsets, permissions, status
-from .serializers import ResgisterSerializer, ConversationSerializer, MessageSerailizer, ConversationCreateSerailizer
+from .serializers import (
+    ResgisterSerializer, 
+    ConversationSerializer,
+    MessageSerailizer, 
+    ConversationCreateSerailizer,
+    MessageCreate,
+)
+
 from django.contrib.auth import get_user_model
 from .models import Conversation, Messages, RoleChoices
 from django.shortcuts import get_object_or_404
@@ -182,3 +189,44 @@ class ConservationViewset(viewsets.ModelViewSet):
             conversation_obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_403_FORBIDDEN, data="Can't perform this action")
+
+    
+class MessageViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MessageCreate
+    queryset = Messages.objects.all()
+    lookup_field = 'pk'
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        conversation_id = kwargs.get("conversation_pk") 
+        print(len(conversation_id))
+        strp_conversation_id = conversation_id.strip()
+        print(len(strp_conversation_id))
+        msg = ''
+        if not strp_conversation_id:
+            msg += "please provide the conversation id"
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=msg)
+        try:
+            conversation_obj = get_object_or_404(Conversation, conversation_id=strp_conversation_id)
+            # check is the user is in list o fparticipants
+
+            if request.user not in conversation_obj.participants.all():
+                msg +=  "You can't contribute to this conversation"
+                return Response(status=status.HTTP_403_FORBIDDEN, data={"success": False, "message": msg})
+        except Exception as e:
+            msg += str(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "message": f"Error: {msg}"})
+
+        serializer.save(sender=request.user, conversation=conversation_obj)
+        msg += "message sent"
+        return Response(
+            status=status.HTTP_201_CREATED,
+            data={
+                "success": True,
+                'message': msg,
+                "message_body": serializer.validated_data 
+            }
+        )
+        

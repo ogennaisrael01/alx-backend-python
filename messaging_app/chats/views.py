@@ -25,7 +25,7 @@ class RegisterViewset(viewsets.ModelViewSet):
 
     # continue code
 
-class ConservationViewset(viewsets.ModelViewSet):
+class ConversationViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ConversationCreateSerailizer
     queryset = Conversation.objects.prefetch_related("messages")
@@ -233,4 +233,3 @@ class MessageViewSet(viewsets.ModelViewSet):
             }
         )
 
-         

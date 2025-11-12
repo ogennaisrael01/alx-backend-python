@@ -88,4 +88,50 @@ class CustomUser(AbstractBaseUser):
         return None
     
     def __str__(self) -> str:
-        return f"{self.email} ==== {self.role} ==== {self.get_full_name()}"
+        return f"{self.email} ==== {self.role}"
+
+
+
+class Conversation(models.Model):
+    conversation_id = models.UUIDField(
+        max_length=20,
+        primary_key=True,
+        default=uuid.uuid4(),
+        db_index=True)
+    name = models.CharField(
+        max_length=500, 
+        null=False, 
+        blank=False)
+
+    description = models.TextField()
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, related_name="owned_conversations", null=True)
+    participants = models.ManyToManyField(CustomUser, related_name="conversations")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "conversations"
+        verbose_name = "Conversations"
+    def __str__(self):
+        return f"{self.user.username} == Created by === {self.name}"
+
+
+class Messages(models.Model):
+    message_id = models.UUIDField(
+        max_length=20, 
+        primary_key=True,
+        default=uuid.uuid4(),
+        db_index=True)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="messages")
+    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="messages")
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "messages"
+        verbose_name = "Messages"
+        ordering = ["-created_at"]
+    
+    def __str__(self):
+        return  f"{self.sender.username} ==== {self.message}"

@@ -15,8 +15,11 @@ from chats.models import Conversation, Messages
 User = get_user_model()
 def run():
     user = User.objects.get(username="Oge123")
-    conversation = Conversation.objects.filter(name__icontains="Movie Nights").first()
-    message = Messages.objects.create(sender=user, conversation_id=conversation.conversation_id, message="Welcome #everyone!")
+    conversation = Conversation.objects.filter(name__icontains="Startup Founders").first()
+    # conversation.participants.add(user)
+    print(user.id)
+    print(conversation.conversation_id)
+
     print(connection.queries)
   
 

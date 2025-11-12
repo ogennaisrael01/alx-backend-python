@@ -84,7 +84,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     last_msg = serializers.SerializerMethodField()
     class Meta:
         model = Conversation
-        fields = ["name", "description", "user", "participants", "created_at", "messages", "participants_names", "last_msg"]
+        fields = ["conversation_id", "name", "description", "user", "participants", "created_at", "messages", "participants_names", "last_msg"]
 
     def get_participants_names(self, obj):
         names = [name.username for name in obj.participants.all()]
@@ -95,6 +95,6 @@ class ConversationSerializer(serializers.ModelSerializer):
         if last_msg:
             return {""
                 "sender": last_msg.sender.username,
-                "message": last_msg.message
+                "message": last_msg.message_body
             }
         return None

@@ -3,11 +3,11 @@ from rest_framework.routers import DefaultRouter
 from .views import RegisterViewset, ConservationViewset
 
 
-router = DefaultRouter()
+routers = DefaultRouter()
 
-router.register(r'register', RegisterViewset, basename="register")
-router.register(r'conversation', ConservationViewset, basename="conversation")
+routers.register(r'register', RegisterViewset, basename="register")
+routers.register(r'conversation', ConservationViewset, basename="conversation")
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', include(routers.urls)),
 
 ]

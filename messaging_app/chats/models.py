@@ -44,7 +44,7 @@ class RoleChoices(models.TextChoices):
     HOST = 'HOST', 'host'
 
 class CustomUser(AbstractBaseUser):
-    user_id = models.UUIDField(
+    id = models.UUIDField(
         max_length=20, 
         primary_key=True,
         default=uuid.uuid4()

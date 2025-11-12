@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.db.models  import Q
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -51,8 +52,8 @@ class ConservationViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer=serializer)
-        conversatioon = Conservation.objects.get(name=serializer.validated_data.get("name"))
-        conservation.participants.add(user)
+        conversatioon = Conversation.objects.filter(name=serializer.validated_data.get("name"), user=user).first()
+        conversatioon.participants.add(user)
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
     
 
@@ -76,3 +77,108 @@ class ConservationViewset(viewsets.ModelViewSet):
             return Response(status=status.HTTP_200_OK, data={"success": True, "data": serializer.data})
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "message": e})
+
+        
+    @action(methods=["post"], detail=False, url_path="add-user")
+    def add_user_to_conservation(self, request, *args, **kwargs):
+        """
+            - Add users to conversations 
+            - user_is = query_params
+            - conversation_id = query_params
+        """
+        user_id = request.query_params.get("user_id")
+        conversation_id = request.query_params.get("conversation_id")
+        msg = ""  
+        if not user_id:
+            msg += "Please provide the user id of the person you want to include to your conversation"
+            return Response(msg)
+        if not conversation_id:
+            msg += "please provide the conversation id"
+            return Response(msg)
+     
+        user_obj = get_object_or_404(User, id=user_id)
+        conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+        try:
+            if request.user.id != conversation_obj.user.id:
+                return Response(status=status.HTTP_403_FORBIDDEN, data={"message": "Can't perform this action"})
+            if user_obj in conversation_obj.participants.all():
+                return Response(status=status.HTTP_302_FOUND, data={"success": f'{user_obj.username} is already in {conversation_obj.name}'})
+            conversation_obj.participants.add(user_obj)    
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "message": f"Unable to add {user_obj.username} to {conversation_obj.name}: {e}"})
+        return Response(status=status.HTTP_200_OK, data={
+            "success": True,
+            "message": f"add {user_obj.username} to {conversation_obj.name}"
+        })
+
+    @action(methods=["post"], detail=False, url_path="remove-user")
+    def remove_user_from_conversation(self, request, *args, **kwargs):
+        """"
+            - Remove user from your conversations
+        """
+        user_id = request.query_params.get("user_id")
+        conversation_id = request.query_params.get("conversation_id")
+        msg = ''
+        if not user_id:
+            msg += "provide the user id"
+            return Response(msg)
+        if not conversation_id:
+            msg += "provide conversation id"
+            return Response(msg)
+
+        user_obj = get_object_or_404(User, id=user_id)
+        conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+        try:
+            if request.user != conversation_obj.user:
+                msg += "Can't perform this action"
+                return Response(status_code=status.HTTP_403_FORBIDDEN, data=msg)
+            if user_obj not in conversation_obj.participants.all():
+                msg += f"{user_obj.user} is not in your conversation"
+                return Response(status=status.HTTP_400_BAD_REQUEST, data=msg)
+            conversation_obj.participants.remove(user_obj)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={
+                "success": False,
+                "message": f"Error: {e}"
+            }) 
+        
+        return Response(status=status.HTTP_200_OK, data={
+            "success": True, 
+            "message": f"You removed {user_obj.username}"
+        })
+    
+    def update(self, request, *args, **kwargs):
+        conversation_id = kwargs.get("pk")
+        conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+        if request.user.id != conversation_obj.user.id:
+            return Response(status=status.HTTP_403_FORBIDDEN, data={
+                "success": False,
+                "message": "You cant perform this action"
+            })
+        serializer = self.get_serializer(data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            Conversation.objects.filter(conversation_id=conversation_id).update(updated_at=timezone.now(), **serializer.validated_data)
+            return Response(status=status.HTTP_200_OK, data={
+                "success": True,
+                "message": "updated successfull",
+                "data": serializer.validated_data
+            }
+            )
+    def retrieve(self, request, *args, **kwargs):
+        conversation_id = kwargs.get("pk")
+        conversation = get_object_or_404(Conversation, conversation_id=conversation_id, user=request.user)
+        print(conversation)
+        serializer = ConversationSerializer(conversation)
+        return Response(status=status.HTTP_200_OK, data={
+            "success": True,
+            "data": serializer.data
+            }
+            )
+
+    def destroy(self, request, *args, **kwargs):
+        conversation_id = kwargs.get("pk")
+        conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+        if conversation_obj.user == request.user:
+            conversation_obj.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN, data="Can't perform this action")

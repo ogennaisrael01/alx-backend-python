@@ -8,23 +8,15 @@ User = get_user_model()
 
 class ResgisterSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=200)
-    password = serializers.CharField(
-        max_length=50,
-        write_only=True,
-        required=True,
-        error_messages={
-            "blank": "password cannot be blank",
-            "required": "password is required for registration"
-        }
-    )
+    password = serializers.CharField( max_length=50, write_only=True)
     role = serializers.ChoiceField(choices=["HOST", 'ADMIN', 'GUEST'])
 
     def validate_password(self, value):
         if value:
-            password = _validate_password(value)
-            return password
-        return serializers.ValidationError("Please provide your password")
-    
+             return serializers.ValidationError("Please provide your password")
+        _validate_password(value)
+        return value
+       
     def validate_email(self, value: str):
         email = value.lower()
 
@@ -45,7 +37,12 @@ class MessageSerailizer(serializers.ModelSerializer):
     sender = serializers.ReadOnlyField(source="sender.username")
     class Meta:
         model = Messages
-        fields = ['message_id', "sender", "message_body", "sent_at"]
+        fields = [
+            'message_id', 
+            "sender", 
+            "message_body", 
+            "sent_at"
+            ]
 
     
 class ConversationCreateSerailizer(serializers.Serializer):
@@ -84,7 +81,17 @@ class ConversationSerializer(serializers.ModelSerializer):
     last_msg = serializers.SerializerMethodField()
     class Meta:
         model = Conversation
-        fields = ["conversation_id", "name", "description", "user", "participants", "created_at", "messages", "participants_names", "last_msg"]
+        fields = [
+            "conversation_id", 
+            "name", 
+            "description", 
+            "user", 
+            "participants", 
+            "created_at", 
+            "messages", 
+            "participants_names", 
+            "last_msg"
+            ]
 
     def get_participants_names(self, obj):
         names = [name.username for name in obj.participants.all()]

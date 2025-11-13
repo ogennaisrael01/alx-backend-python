@@ -16,10 +16,11 @@ from rest_framework.decorators import action
 from django.db.models  import Q
 from django.utils import timezone
 from django_filters import rest_framework as filters
+from rest_framework.views import APIView
 
 User = get_user_model()
 
-class RegisterViewset(viewsets.ModelViewSet):
+class RegisterViews(APIView):
     permission_classes = []
     serializer_class = ResgisterSerializer
     queryset = User.objects.all()
@@ -29,7 +30,7 @@ class RegisterViewset(viewsets.ModelViewSet):
 class ConversationViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ConversationCreateSerailizer
-    queryset = Conversation.objects.prefetch_related("messages")
+    queryset = Conversation.objects.prefetch_related("messages", "participants")
     lookup_field = "pk"
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields  = ["name", "user__username", "messages__message_body", "created_at"]
@@ -57,7 +58,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         user = request.user
 
         if user.role not in [RoleChoices.ADMIN, RoleChoices.HOST]:
-            msg = "Can't initiate converstaion"
+            msg = "you can't initiate a converstaion"
             return Response(status=status.HTTP_403_FORBIDDEN, data= {"success": False, "message" : msg})
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -69,7 +70,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         """ Get all conversation where current user is the  host"""
-        queryset = self.get_queryset()
+        queryset = self.get_queryset().select_related("user")
         conversations = queryset.filter(user=request.user)
         serializer = ConversationSerializer(conversations, many=True)
         return Response(serializer.data)

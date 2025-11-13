@@ -12,7 +12,7 @@ class CustomeUserManager(BaseUserManager):
             raise ValueError("Please enter your email adderess")
         if not password:
             raise ValueError("Please enter your password")
-        
+ 
         normalized_email = self.normalize_email(email)
         user = self.model(email=normalized_email, password=password, **extra_fields)
         user.set_password(password)
@@ -58,6 +58,7 @@ class CustomUser(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
     username =  models.CharField(max_length=200, unique=True, null=True, blank=True)
     
+    is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 

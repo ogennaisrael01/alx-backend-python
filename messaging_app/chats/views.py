@@ -258,7 +258,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 if page and size:
                     queryset = conversation_obj.messages.all()[offset:size]
                 else:
-                    queryset = conversation_obj.messages.all()
+                    queryset = conversation_obj.messages.all()[:10]
                 serializer = MessageSerailizer(queryset, many=True)
                 return  Response(status=status.HTTP_200_OK, data={"success": True, "result": serializer.data})
         except Exception as e:
@@ -299,7 +299,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                                 data={"success": False, "msg": "error updating message"})
         
         except Exception as e:
-            msg = f'error occured: {e}'
+            msg = f'error occurred: {e}'
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "msg": msg})
 
 
@@ -311,11 +311,11 @@ class MessageViewSet(viewsets.ModelViewSet):
             message = queryset.filter(message_id=message_id).first()
             conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
             if message.sender == request.user or request.user.role in [RoleChoices.ADMIN, RoleChoices.HOST]:
-                # delete the message is the user meets the requiements
+                # delete the message is the user meets the requirements
                 queryset.filter(conversation=conversation, message_id=message_id).delete()
 
                 return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
-            msg = f"Error occured: {e}"
+            msg = f"Error occurred: {e}"
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "msg": msg})
         

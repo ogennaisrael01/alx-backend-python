@@ -211,7 +211,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         conversation_id = kwargs.get("conversation_pk") 
         strp_conversation_id = conversation_id.strip()
         msg = ''
-        if not strp_conversation_id:
+        if not conversation_id:
             msg += "please provide the conversation id"
             return Response(status=status.HTTP_400_BAD_REQUEST, data=msg)
         try:
@@ -236,3 +236,86 @@ class MessageViewSet(viewsets.ModelViewSet):
             }
         )
 
+
+    def list(self, request, *args, **kwargs):
+        page = request.query_params.get("page", None)
+        size = request.query_params.get("size", None)
+
+        if page and size:
+            offset = (page - 1) * size
+        else:
+            pass
+        queryset = self.get_queryset()
+        conversation_id = kwargs.get("conversation_pk")
+        msg = ''
+        if not conversation_id:
+            msg += "please provide your conversation id"
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=msg)
+        strp_conversation_id = conversation_id.strip()
+        try:
+            conversation_obj = get_object_or_404(Conversation, conversation_id=strp_conversation_id)
+            if request.user in conversation_obj.participants.all():
+                if page and size:
+                    queryset = conversation_obj.messages.all()[offset:size]
+                else:
+                    queryset = conversation_obj.messages.all()
+                serializer = MessageSerailizer(queryset, many=True)
+                return  Response(status=status.HTTP_200_OK, data={"success": True, "result": serializer.data})
+        except Exception as e:
+            msg += f"error occured: {str(e)}"
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "msg": msg})
+        
+    def retrieve(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        conversation_id = kwargs.get("conversation_pk").strip()
+        message_id = kwargs.get("pk").strip()
+        try:
+            conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
+            message = queryset.filter(conversation=conversation, message_id=message_id)
+        except Exception as e:
+            msg = f"Error occured: {e}"
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "msg": msg})
+        serializer = MessageSerailizer(message, many=True)
+        return Response(status=status.HTTP_200_OK, data={"success": True, "data": serializer.data})
+
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        conversation_id = kwargs.get("conversation_pk").strip() 
+        queryset = self.get_queryset()
+        message_id = kwargs.get("pk").strip()
+        try:
+            conversation_obj = get_object_or_404(Conversation, conversation_id=conversation_id)
+            message_upt = queryset.filter(
+                conversation=conversation_obj, 
+                message_id=message_id, 
+                sender=request.user).update(**serializer.validated_data)
+            
+            if message_upt == 1:
+                return Response(status=status.HTTP_200_OK, data={"success": True, "msg": "updated message"})
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST,
+                                data={"success": False, "msg": "error updating message"})
+        
+        except Exception as e:
+            msg = f'error occured: {e}'
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "msg": msg})
+
+
+    def destroy(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        conversation_id = kwargs.get("conversation_pk").strip()
+        message_id = kwargs.get("pk").strip()
+        try:
+            message = queryset.filter(message_id=message_id).first()
+            conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
+            if message.sender == request.user or request.user.role in [RoleChoices.ADMIN, RoleChoices.HOST]:
+                # delete the message is the user meets the requiements
+                queryset.filter(conversation=conversation, message_id=message_id).delete()
+
+                return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            msg = f"Error occured: {e}"
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "msg": msg})
+        

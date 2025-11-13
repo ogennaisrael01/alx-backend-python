@@ -15,10 +15,12 @@ from chats.models import Conversation, Messages
 User = get_user_model()
 def run():
     user = User.objects.get(username="Oge123")
-    conversation = Conversation.objects.filter(name__icontains="Startup Founders").first()
-    # conversation.participants.add(user)
-    print(user.id)
-    print(conversation.conversation_id)
+    conversation = Conversation.objects.filter(conversation_id__iexact="485c74af-11bb-44e7-8d46-a5ec49237e69").first()
+    if user in conversation.participants.all():
+        print(conversation.participants.all())
+        print(conversation.messages.all()[:5])
+        return 
+    print("error")
 
     print(connection.queries)
   

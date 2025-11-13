@@ -135,4 +135,4 @@ class Messages(models.Model):
         ordering = ["-created_at"]
     
     def __str__(self):
-        return  f"{self.sender.username} ==== {self.message}"
+        return  f"{self.sender.username} ==== {self.message_body}"

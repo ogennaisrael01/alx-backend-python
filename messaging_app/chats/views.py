@@ -293,13 +293,6 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        page = request.query_params.get("page", None)
-        size = request.query_params.get("size", None)
-
-        if page and size:
-            offset = (page - 1) * size
-        else:
-            pass
         queryset = self.get_queryset()
         conversation_id = kwargs.get("conversation_pk")
         msg = ''
@@ -310,10 +303,8 @@ class MessageViewSet(viewsets.ModelViewSet):
         try:
             conversation_obj = get_object_or_404(Conversation, conversation_id=strp_conversation_id)
             if request.user in conversation_obj.participants.all():
-                if page and size:
-                    queryset = conversation_obj.messages.all()[offset:size]
-                else:
-                    queryset = conversation_obj.messages.all()[:10]
+                queryset = conversation_obj.messages.all()
+            
                 serializer = MessageSerailizer(queryset, many=True)
                 return  Response(status=status.HTTP_200_OK, data={"success": True, "result": serializer.data})
         except Exception as e:

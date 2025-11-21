@@ -9,7 +9,7 @@ from .serializers import (
 )
 
 from django.contrib.auth import get_user_model
-from .models import Conversation, Messages, RoleChoices
+from .models import Conversation, Messages
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -17,15 +17,63 @@ from django.db.models  import Q
 from django.utils import timezone
 from django_filters import rest_framework as filters
 from rest_framework.views import APIView
+from .auth import google_auth
+from .models import CustomUser
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
-class RegisterViews(APIView):
+class EmailAuthApi(APIView):
     permission_classes = []
     serializer_class = ResgisterSerializer
     queryset = User.objects.all()
 
     # continue code
+
+class GoogleAuthApi(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        token = request.data.get("id_token")
+
+        if not token:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"msg": "provide your google token"})  
+        payload = google_auth(token)
+        if payload.get("success") is not True:
+            return Response(data=payload.get("msg"))
+        data = payload.get("data")
+
+        email = data.get("email")
+        name = data.get("name")
+        profile_picture = data.get("profile_picture")
+        try:
+            user, created = User.objects.get_or_create(email=email)
+            if created:
+                print("saving")
+                user.set_unusable_password()
+                user.email = email
+                user.username = email.split("@")[0]
+                user.first_name = name.split(" ")[0]
+                user.last_name = name.split(" ")[1]
+                user.registration_method = CustomUser.RegistrationMethod.GOOGLE
+                user.save()
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"msg": "Plaase register with google"})
+
+        refresh = RefreshToken.for_user(user)
+        return Response(status=status.HTTP_201_CREATED, 
+                        data={
+                            "success": True,
+                            "msg": "User created via google",
+                            "token": {
+                                "access": str(refresh.access_token),
+                                "refresh": str(refresh)
+                            },
+                            "user_data": {
+                                "email": user.email,
+                                "username": user.username
+                            }
+                        })
 
 class ConversationViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
@@ -57,7 +105,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         """
         user = request.user
 
-        if user.role not in [RoleChoices.ADMIN, RoleChoices.HOST]:
+        if user.role not in [CustomUser.RoleChoices.ADMIN, CustomUser.RoleChoices.HOST]:
             msg = "you can't initiate a converstaion"
             return Response(status=status.HTTP_403_FORBIDDEN, data= {"success": False, "message" : msg})
         serializer = self.get_serializer(data=request.data)
@@ -311,7 +359,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         try:
             message = queryset.filter(message_id=message_id).first()
             conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
-            if message.sender == request.user or request.user.role in [RoleChoices.ADMIN, RoleChoices.HOST]:
+            if message.sender == request.user or request.user.role in [CustomUser.RoleChoices.ADMIN, CustomUser.RoleChoices.HOST]:
                 # delete the message is the user meets the requirements
                 queryset.filter(conversation=conversation, message_id=message_id).delete()
 

@@ -9,6 +9,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
+# GOOGLE CONFIG
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET_KEY = env("GOOGLE_CLIENT_SECRET_KEY")
+
+
 SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env.bool("DEBUG")
@@ -19,12 +24,12 @@ AUTH_USER_MODEL = "chats.CustomUser"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     "rest_framework.permissions.IsAuthenticated"
-    # ]
+    'DEFAULT_PERMISSION_CLASSES': [
+        "rest_framework.permissions.IsAuthenticated"
+    ]
 }
 
 SIMPLE_JWT = {
@@ -33,7 +38,6 @@ SIMPLE_JWT = {
     }
 
 INTERNAL_IPS = [
-    # ...
     "127.0.0.1",
     # ...
 ]
@@ -52,6 +56,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'rest_framework_simplejwt',
+    "phonenumber_field"
 
 ]
 

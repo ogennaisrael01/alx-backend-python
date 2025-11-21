@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 import uuid
 
 class CustomeUserManager(BaseUserManager):
@@ -38,12 +38,15 @@ class CustomeUserManager(BaseUserManager):
     
 
 
-class RoleChoices(models.TextChoices):
-    GUEST = 'GUEST', 'guest'
-    ADMIN = 'ADMIN', 'admin'
-    HOST = 'HOST', 'host'
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    class RoleChoices(models.TextChoices):
+        GUEST = 'GUEST', 'guest'
+        ADMIN = 'ADMIN', 'admin'
+        HOST = 'HOST', 'host'
+    class RegistrationMethod(models.TextChoices):
+        EMAIL = "EMAIL", "email"
+        GOOGLE = "GOOGLE", "google"
 
-class CustomUser(AbstractBaseUser):
     id = models.UUIDField(
         max_length=20, 
         primary_key=True,
@@ -57,14 +60,14 @@ class CustomUser(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     username =  models.CharField(max_length=200, unique=True, null=True, blank=True)
+    registration_method = models.CharField(max_length=20, choices=RegistrationMethod.choices, default=RegistrationMethod.EMAIL)
     
     is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
     objects = CustomeUserManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["first_name", "last_name", "username"]
 
     class Meta:
         db_table = "users"
@@ -75,7 +78,8 @@ class CustomUser(AbstractBaseUser):
             models.Index(fields=["role"], name="role_idx"),
             models.Index(fields=["id"], name="id_idx"),
             models.Index(fields=["-created_at"], name="created_desc_idx"),
-            models.Index(fields=["username"], name="username_idx")
+            models.Index(fields=["username"], name="username_idx"),
+            models.Index(fields=["registration_method"], name="register_idx")
         ]
 
     @property

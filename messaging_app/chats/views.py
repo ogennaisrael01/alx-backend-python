@@ -1,5 +1,5 @@
 
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, generics
 from .serializers import (
     ResgisterSerializer, 
     ConversationSerializer,
@@ -20,10 +20,11 @@ from rest_framework.views import APIView
 from .auth import google_auth
 from .models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
+from .permissions import IsPaticipantsOfConversation
 
 User = get_user_model()
 
-class EmailAuthApi(APIView):
+class EmailAuthApi(generics.CreateAPIView):
     permission_classes = []
     serializer_class = ResgisterSerializer
     queryset = User.objects.all()
@@ -76,7 +77,7 @@ class GoogleAuthApi(APIView):
                         })
 
 class ConversationViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsPaticipantsOfConversation]
     serializer_class = ConversationCreateSerailizer
     queryset = Conversation.objects.prefetch_related("messages", "participants")
     lookup_field = "pk"
@@ -249,7 +250,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
     
 class MessageViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsPaticipantsOfConversation]
     serializer_class = MessageCreate
     queryset = Messages.objects.all()
     lookup_field = 'pk'

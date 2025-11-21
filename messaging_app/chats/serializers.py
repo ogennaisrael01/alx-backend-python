@@ -9,7 +9,6 @@ User = get_user_model()
 class ResgisterSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=200)
     password = serializers.CharField( max_length=50, write_only=True)
-    role = serializers.ChoiceField(choices=["HOST", 'ADMIN', 'GUEST'])
 
     def validate_password(self, value):
         if value:

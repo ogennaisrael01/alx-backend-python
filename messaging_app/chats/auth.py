@@ -12,7 +12,7 @@ class CustomTokenSerializer(serializers.TokenObtainPairSerializer):
         token = super().get_token(user=user)
         
         token["username"] = user.username
-        token["firstname"] = user.firstname
+        token["first_name"] = user.first_name
         token["last_name"] = user.last_name
 
         return token

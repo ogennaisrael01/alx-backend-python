@@ -21,6 +21,8 @@ from .auth import google_auth
 from .models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from .permissions import IsPaticipantsOfConversation
+from .pagination import CustomPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 User = get_user_model()
 
@@ -248,12 +250,15 @@ class ConversationViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_403_FORBIDDEN, data="Can't perform this action")
 
-    
 class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsPaticipantsOfConversation]
     serializer_class = MessageCreate
     queryset = Messages.objects.all()
     lookup_field = 'pk'
+    pagination_class = [CustomPagination]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["sender__username",  "message_body", "convesation__name"]
+
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

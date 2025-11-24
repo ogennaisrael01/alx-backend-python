@@ -33,14 +33,23 @@ class RestrictAccessByTimeMiddleware:
         self.date = datetime.now().hour
 
     def __call__(self, request: HttpRequest, *args, **kwds):
-        try:
-            if request and self.date > 21 or self.date < 18:
-                raise PermissionDenied()
-        except Exception as e:
-            raise Exception()
+        """ Restrict access the these urls
+            - [
+            '/api/v1/conversations/,
+            'api/v1/conversations/messages/'
+        ]
+        """
+        restricted_path = [
+            '/api/v1/conversations/',
+            '/api/v1/conversations/messages/'
+        ]
+        if request.path in restricted_path:
+            raise PermissionDenied()
+        if request and self.date > 21 or self.date < 18:
+            raise PermissionDenied()
+      
         response = self.get_response(request)
         return response
-    
 
 
 

@@ -2,6 +2,7 @@ from .utils.retry_on_failures import Log
 from datetime import datetime
 from django.http import HttpRequest
 import logging
+from rest_framework.exceptions import PermissionDenied
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,5 +25,25 @@ class RequestLoggingMiddleware:
 
         response = self.get_response(request)
         return response
+
+class RestrictAccessByTimeMiddleware:
+    """" Restrict Access to chat from time outside 6pm to 9pm"""
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.date = datetime.now().hour
+
+    def __call__(self, request: HttpRequest, *args, **kwds):
+        try:
+            if request and self.date > 21 or self.date < 18:
+                raise PermissionDenied()
+        except Exception as e:
+            raise Exception()
+        response = self.get_response(request)
+        return response
+    
+
+
+
+    
 
     

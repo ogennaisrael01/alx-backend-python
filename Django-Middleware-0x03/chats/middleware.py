@@ -16,10 +16,10 @@ class RequestLoggingMiddleware:
     def __call__(self, request: HttpRequest, *args, **kwds):
         now = datetime.now().strftime("%d-%B-%Y %H:%M:%S")
         user = request.user
-        log_message = logging.info(f"{datetime.now()} - User: {user} - Path: {request.path}")
+        log_message = f"{now} - User: {user} - Path: {request.path}"
 
         # save every request log message in a file called request.log 
-        with Log("request_log.log", "a") as file:
+        with Log("requests.log", "a") as file:
             file.write(f"{log_message} \n")
 
         response = self.get_response(request)

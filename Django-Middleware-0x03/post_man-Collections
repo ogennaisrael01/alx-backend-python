@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "e50d9d19-db26-4b32-b741-f13e424f3738",
+		"name": "auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45701627",
+		"_collection_link": "https://www.postman.com/ogennaisrael/chat-room-api/collection/6qo6qz1/auth?action=share&source=collection_link&creator=45701627"
+	},
+	"item": [
+		{
+			"name": "email-register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"movins806@gmail.com\",\r\n    \"password\": \"password123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/register/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "email-login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"ogennaisrael@gmail.com\",\r\n    \"password\": \"0987poiu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/token/obtain/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"token",
+						"obtain",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "google-auth",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id_token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImE1NzMzYmJiZDgxOGFhNWRiMTk1MTk5Y2Q1NjhlNWQ2ODUxMzJkM2YiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTQxODI0NzM2OTc2NTc4NzA1NTEiLCJlbWFpbCI6Im9nZW5uYWlzcmFlbDk4QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoidWxoN2FUb1FHU0lQUzUtakl1anRWQSIsIm5hbWUiOiJvZ2VubmEgaXNyYWVsIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0ttS1lzUzhZN0JiM3NKVmc0OU1NankyeXpJZWlYOUw1aEZRdmpnbkFyTVNqUnNYRW89czk2LWMiLCJnaXZlbl9uYW1lIjoib2dlbm5hIiwiZmFtaWx5X25hbWUiOiJpc3JhZWwiLCJpYXQiOjE3NjM3MjY2NTIsImV4cCI6MTc2MzczMDI1Mn0.gQ7aCbEl5ftrE1N6Epj8mWKQtUspEyx_WHRegT2rHj2xPL5om1HnisllVwRB9FlxcVtwRa09NusSt4hcnrYKss5v8hG8bocScFch4Mndft4xIFUUJWxpvrhzNiitF7q8XQConsVC5GY015Gg6MHpOpIpBIaDmcdQqQ5ANCSry60Hovk4pEZhx7aQAg5T4ctb6m8OsCUoPh3yktBNYtgtu78xu60waOUkH5kRLLFViItBqReJXKhFN0lvNnykqqo6zc-J075SE8yLNjZUAxIPtQ_gGhzSlH6ciAp_lDQ0Ve41qNAAb7-nQ93sqI1-PzJaJ-Q9Jul4u7QAIQPkX61JCQ\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/google/auth/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"google",
+						"auth",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

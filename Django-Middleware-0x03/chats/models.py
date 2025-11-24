@@ -50,7 +50,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(
         max_length=20, 
         primary_key=True,
-        default=uuid.uuid4()
+        default=uuid.uuid4
         )
     email =  models.EmailField(max_length=200, unique=True)
     first_name = models.CharField(max_length=200, blank=True, null=True)
@@ -101,7 +101,7 @@ class Conversation(models.Model):
     conversation_id = models.UUIDField(
         max_length=20,
         primary_key=True,
-        default=uuid.uuid4(),
+        default=uuid.uuid4,
         db_index=True)
     name = models.CharField(
         max_length=500, 
@@ -125,7 +125,7 @@ class Messages(models.Model):
     message_id = models.UUIDField(
         max_length=20, 
         primary_key=True,
-        default=uuid.uuid4(),
+        default=uuid.uuid4,
         db_index=True)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="messages")
     sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="messages")

@@ -79,7 +79,8 @@ class GoogleAuthApi(APIView):
                         })
 
 class ConversationViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, IsPaticipantsOfConversation]
+    # permission_classes = [permissions.IsAuthenticated, IsPaticipantsOfConversation]
+    permission_classes = []
     serializer_class = ConversationCreateSerailizer
     queryset = Conversation.objects.prefetch_related("messages", "participants")
     lookup_field = "pk"

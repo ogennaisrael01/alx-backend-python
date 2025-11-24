@@ -3,7 +3,7 @@ import csv
 import time
 
 
-class LogLoggings:
+class Log:
     def __init__(self, file_name, method):
         self.file_name = open(file_name, mode=method, newline="")
 
@@ -29,7 +29,7 @@ def retry_on_failures(google_payload):
         if attempts < number_of_retries:
             time.sleep(5)
         attempts += 1
-        with LogLoggings("loggings.csv", "w") as csv_file:
+        with Log("loggings.csv", "w") as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(msg)
         

@@ -12,6 +12,7 @@ from chats.serializers import Messageerailizer
 from django.db import connection
 from django.views.decorators.cache import cache_page
 
+
 User = get_user_model()
 
 @api_view(http_method_names=["DELETE"])

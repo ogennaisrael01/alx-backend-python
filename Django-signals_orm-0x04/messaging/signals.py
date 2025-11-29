@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 from chats.models import Conversation, Message
 from django.contrib.auth import get_user_model
@@ -59,5 +59,16 @@ def save_message_to_history_before_edit(sender, instance, **kwargs):
     logger.info(f"message updated by {instance.sender.username}. message: {instance.message_body}")
 
 
-
-
+@receiver(post_delete, sender=User)
+def delete_account_signal(sender, instance, **kwargs):
+    """" Delete all related all messages and notification realted to this user"""
+    if instance:
+        message = Message.objects.filter(sender=instance)
+        notifications = Notification.objects.filter(sender=instance)
+        if message:
+            message.delete()
+        if notifications:
+            notifications.delete()
+        
+    logger.info(f'Account {instance} deleted along with related messages: count {len(message)} messages\
+                notifications: {len(notifications)} notifications all deleted')

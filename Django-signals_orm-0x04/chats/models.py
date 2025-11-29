@@ -133,6 +133,7 @@ class Message(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_edited = models.BooleanField(default=False)
 
     class Meta:
         db_table = "Message"
@@ -141,3 +142,25 @@ class Message(models.Model):
     
     def __str__(self):
         return  f"{self.sender.username} ==== {self.message_body}"
+
+    
+class MessageHistory(models.Model):
+    message_history_id = models.UUIDField(
+        max_length=20,
+        primary_key=True,
+        default=uuid.uuid4,
+        db_index=True
+    )
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name="message_history")
+    message_body_history = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    performed_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+
+
+    def __str__(self):
+        return f"MesssageHistory('{self.performed_by}, {self.timestamp}')"
+    
+    class Meta:
+        ordering = ["-timestamp"]
+
+

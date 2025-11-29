@@ -1,9 +1,10 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from chats.models import Conversation, Message
+from chats.models import Conversation, Message, MessageHistory
 from django.contrib.auth import get_user_model
 import logging
 from .models import Notification
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -42,5 +43,21 @@ def notify_users_signal(sender, instance, created, **kwargs):
                 notification.receiver.add(participant)
 
     logger.info(f"{instance.sender.username} sent a message: {instance.message_body}")
+
+
+@receiver(pre_save, sender=Message)
+def save_message_to_history_before_edit(sender, instance, **kwargs):
+    if not instance.pk:
+        return 
+    previous_message = Message.objects.filter(message_id=instance.pk).first()
+    if previous_message:
+        message_history = MessageHistory.objects.create(
+            message=previous_message,
+            performed_by=instance.sender,
+            message_body_history=previous_message.message_body
+        )
+    logger.info(f"message updated by {instance.sender.username}. message: {instance.message_body}")
+
+
 
 

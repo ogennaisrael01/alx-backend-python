@@ -333,9 +333,12 @@ class MessageViewSet(viewsets.ModelViewSet):
             message_upt = queryset.filter(
                 conversation=conversation_obj, 
                 message_id=message_id, 
-                sender=request.user).update(**serializer.validated_data)
+                sender=request.user).first()
+            message_upt.message_body = serializer.validated_data.get("message_body")
+            message_upt.is_edited = True
+            message_upt.save()
             
-            if message_upt == 1:
+            if message_upt:
                 return Response(status=status.HTTP_200_OK, data={"success": True, "msg": "updated message"})
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST,

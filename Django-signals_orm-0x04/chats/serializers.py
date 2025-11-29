@@ -34,14 +34,25 @@ class ResgisterSerializer(serializers.Serializer):
 
 class Messageerailizer(serializers.ModelSerializer):
     sender = serializers.ReadOnlyField(source="sender.username")
+    message_histories = serializers.SerializerMethodField()
     class Meta:
         model = Message
         fields = [
             'message_id', 
             "sender", 
             "message_body", 
-            "sent_at"
+            "sent_at",
+            "is_edited",
+            "message_histories"
             ]
+
+    def get_message_histories(self, obj):
+        histories = obj.message_history.all()
+        for history in histories[:1]:
+            return {
+                "current_message": history.message.message_body,
+                "previous_message": history.message_body_history
+            }
 
     
 class ConversationCreateSerailizer(serializers.Serializer):

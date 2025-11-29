@@ -14,8 +14,10 @@ from chats.models import Conversation, Message
 
 User = get_user_model()
 def run():
-    user = User.objects.get(email="ogennaisrael98@gmail.com")
-    print(user)
+    message = Message.objects.get(message_id="1765885e-f3de-4bfb-a636-bdb3c4b10656")
+    histories = message.message_history.all()
+    for history in histories[:1]:
+        print(history.message_body_history)
 
     print(connection.queries)
   

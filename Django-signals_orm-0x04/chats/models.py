@@ -144,23 +144,5 @@ class Message(models.Model):
         return  f"{self.sender.username} ==== {self.message_body}"
 
     
-class MessageHistory(models.Model):
-    message_history_id = models.UUIDField(
-        max_length=20,
-        primary_key=True,
-        default=uuid.uuid4,
-        db_index=True
-    )
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name="message_history")
-    message_body_history = models.TextField()
-    edited_at = models.DateTimeField(auto_now_add=True)
-    edited_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
-
-
-    def __str__(self):
-        return f"MesssageHistory('{self.edited_by}, {self.edited_at}')"
-    
-    class Meta:
-        ordering = ["-edited_at"]
 
 

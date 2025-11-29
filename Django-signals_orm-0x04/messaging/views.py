@@ -10,6 +10,7 @@ from chats.serializers import MessageCreate
 from .models import Message
 from chats.serializers import Messageerailizer
 from django.db import connection
+from django.views.decorators.cache import cache_page
 
 User = get_user_model()
 
@@ -47,3 +48,19 @@ def nested_message_view(request, conversation_pk, message_pk):
     print(connection.queries)
     return Response(status=status.HTTP_200_OK, data=serializer.data)
    
+
+@cache_page(60)
+@api_view(http_method_names=["GET"])
+def unread_messages(request):
+    conversations = Conversation.objects.filter(participants__in=[request.user])
+    for conversation in conversations:
+        messages = conversation.message.all()
+    
+    return Response(status=status.HTTP_200_OK, data=[
+        {
+            "sender": message.sender.username,
+            "message": message.message_body
+        }
+        for message in messages.filter(is_read=False)
+    ])
+

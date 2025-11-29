@@ -4,6 +4,10 @@ from django.contrib.auth import get_user_model
 from chats.models import Conversation
 User = get_user_model()
 
+class UnreadMessagesManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_read=False)
+
 class Message(models.Model):
     message_id = models.UUIDField(
         max_length=20, 
@@ -18,9 +22,14 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     edited = models.BooleanField(default=False)
+    is_read = models.BooleanField(default=False)
+
+    # objects
+    objects = models.Manager()
+    is_unread_maessags = UnreadMessagesManager()
 
     class Meta:
-        db_table = "Message"
+        db_table = "message"
         verbose_name = "message"
         ordering = ["-created_at"]
     

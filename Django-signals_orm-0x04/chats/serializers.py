@@ -42,7 +42,7 @@ class Messageerailizer(serializers.ModelSerializer):
             "sender", 
             "message_body", 
             "sent_at",
-            "is_edited",
+            "edited",
             "message_histories"
             ]
 

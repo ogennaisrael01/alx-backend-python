@@ -133,7 +133,7 @@ class Message(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_edited = models.BooleanField(default=False)
+    edited = models.BooleanField(default=False)
 
     class Meta:
         db_table = "Message"
@@ -153,14 +153,14 @@ class MessageHistory(models.Model):
     )
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name="message_history")
     message_body_history = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-    performed_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+    edited_at = models.DateTimeField(auto_now_add=True)
+    edited_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
 
 
     def __str__(self):
-        return f"MesssageHistory('{self.performed_by}, {self.timestamp}')"
+        return f"MesssageHistory('{self.edited_by}, {self.edited_at}')"
     
     class Meta:
-        ordering = ["-timestamp"]
+        ordering = ["-edited_at"]
 
 

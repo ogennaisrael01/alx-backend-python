@@ -53,7 +53,7 @@ def save_message_to_history_before_edit(sender, instance, **kwargs):
     if previous_message:
         message_history = MessageHistory.objects.create(
             message=previous_message,
-            performed_by=instance.sender,
+            edited_by=instance.sender,
             message_body_history=previous_message.message_body
         )
     logger.info(f"message updated by {instance.sender.username}. message: {instance.message_body}")

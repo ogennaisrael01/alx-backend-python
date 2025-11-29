@@ -9,6 +9,7 @@ from chats.models import Conversation
 from chats.serializers import MessageCreate
 from .models import Message
 from chats.serializers import Messageerailizer
+from django.db import connection
 
 User = get_user_model()
 
@@ -38,10 +39,11 @@ def message_reply(request: HttpRequest, message_pk, conversation_pk) -> Response
 @api_view(http_method_names=["GET"])
 def nested_message_view(request, conversation_pk, message_pk):
     conversation = get_object_or_404(Conversation, pk=conversation_pk)
-    messages = Message.objects.prefetch_related("replies")
+    messages = Message.objects.filter(sender=request.user).select_related("parent_message", "sender", "conversation")
 
     if request.user == conversation.user or request.user in conversation.participants.all():
         message = messages.filter(pk=message_pk)
     serializer = Messageerailizer(message, many=True)
+    print(connection.queries)
     return Response(status=status.HTTP_200_OK, data=serializer.data)
    

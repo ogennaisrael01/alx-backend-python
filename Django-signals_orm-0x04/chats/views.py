@@ -114,8 +114,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer=serializer)
-        conversatioon = Conversation.objects.filter(name=serializer.validated_data.get("name"), user=user).first()
-        conversatioon.participants.add(user)
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
     
 

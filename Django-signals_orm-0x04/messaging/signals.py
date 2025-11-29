@@ -1,9 +1,9 @@
 from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
-from chats.models import Conversation, Message
+from chats.models import Conversation
 from django.contrib.auth import get_user_model
 import logging
-from .models import Notification, MessageHistory
+from .models import Notification, MessageHistory, Message
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)

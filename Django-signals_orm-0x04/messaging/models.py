@@ -1,9 +1,34 @@
 from django.db import models
 import uuid
 from django.contrib.auth import get_user_model
-from chats.models import Message
-
+from chats.models import Conversation
 User = get_user_model()
+
+class Message(models.Model):
+    message_id = models.UUIDField(
+        max_length=20, 
+        primary_key=True,
+        default=uuid.uuid4,
+        db_index=True)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="message")
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message")
+    message_body = models.TextField()
+    parent_message = models.ForeignKey("self", on_delete=models.CASCADE, related_name="replies", null=True, blank=True)
+    sent_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    edited = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = "Message"
+        verbose_name = "message"
+        ordering = ["-created_at"]
+    
+    def __str__(self):
+        return  f"{self.sender.username} ==== {self.message_body}"
+    
+
+
 class Notification(models.Model):
     notification_id = models.UUIDField(
         primary_key=True,
@@ -47,3 +72,4 @@ class MessageHistory(models.Model):
     
     class Meta:
         ordering = ["-edited_at"]
+

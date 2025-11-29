@@ -2,7 +2,8 @@ from rest_framework import serializers
 import email_validator
 from django.contrib.auth.password_validation import validate_password as _validate_password
 from django.contrib.auth import get_user_model
-from .models import Conversation, Message
+from .models import Conversation
+from messaging.models import Message
 
 User = get_user_model()
 
@@ -57,12 +58,13 @@ class Messageerailizer(serializers.ModelSerializer):
             }
     def get_nested_messages(self, obj):
         nested_messages = obj.replies.all()
-        for message in nested_messages:
-            return {
-                "message": message.message_body,
-                "sender": message.sender.username
+        return [
+            {
+                "sender": message.sender.username,
+                "message": message.message_body
             }
-
+            for message in nested_messages
+        ]
     
 class ConversationCreateSerailizer(serializers.Serializer):
     name = serializers.CharField(max_length=500, error_messages={

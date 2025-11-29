@@ -5,8 +5,10 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.http import HttpRequest
-from chats.models import Message, Conversation
+from chats.models import Conversation
 from chats.serializers import MessageCreate
+from .models import Message
+from chats.serializers import Messageerailizer
 
 User = get_user_model()
 
@@ -32,3 +34,14 @@ def message_reply(request: HttpRequest, message_pk, conversation_pk) -> Response
     conversation = get_object_or_404(Conversation, pk=conversation_pk)
     serializer.save(parent_message=message, sender=request.user, conversation=conversation)
     return Response(serializer.validated_data)
+
+@api_view(http_method_names=["GET"])
+def nested_message_view(request, conversation_pk, message_pk):
+    conversation = get_object_or_404(Conversation, pk=conversation_pk)
+    messages = Message.objects.prefetch_related("replies")
+
+    if request.user == conversation.user or request.user in conversation.participants.all():
+        message = messages.filter(pk=message_pk)
+    serializer = Messageerailizer(message, many=True)
+    return Response(status=status.HTTP_200_OK, data=serializer.data)
+   

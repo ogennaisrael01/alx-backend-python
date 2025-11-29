@@ -9,7 +9,8 @@ from .serializers import (
 )
 
 from django.contrib.auth import get_user_model
-from .models import Conversation, Message
+from .models import Conversation
+from messaging.models import Message
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action

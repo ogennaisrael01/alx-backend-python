@@ -2,11 +2,8 @@ from django.db import models
 import uuid
 from django.contrib.auth import get_user_model
 from chats.models import Conversation
+from .managers import UnreadMessagesManager
 User = get_user_model()
-
-class UnreadMessagesManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(is_read=False)
 
 class Message(models.Model):
     message_id = models.UUIDField(
@@ -26,7 +23,7 @@ class Message(models.Model):
 
     # objects
     objects = models.Manager()
-    is_unread_maessags = UnreadMessagesManager()
+    unread = UnreadMessagesManager()
 
     class Meta:
         db_table = "message"

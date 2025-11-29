@@ -61,6 +61,6 @@ def unread_messages(request):
             "sender": message.sender.username,
             "message": message.message_body
         }
-        for message in messages.filter(is_read=False)
+        for message in messages.filter(is_read=False).only("sender", "message_body", "created_at")
     ])
 

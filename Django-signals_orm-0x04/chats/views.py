@@ -3,13 +3,13 @@ from rest_framework import viewsets, permissions, status, generics
 from .serializers import (
     ResgisterSerializer, 
     ConversationSerializer,
-    MessageSerailizer, 
+    Messageerailizer, 
     ConversationCreateSerailizer,
     MessageCreate,
 )
 
 from django.contrib.auth import get_user_model
-from .models import Conversation, Messages
+from .models import Conversation, Message
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -81,10 +81,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated, IsPaticipantsOfConversation]
     permission_classes = []
     serializer_class = ConversationCreateSerailizer
-    queryset = Conversation.objects.prefetch_related("messages", "participants")
+    queryset = Conversation.objects.prefetch_related("message", "participants")
     lookup_field = "pk"
     filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields  = ["name", "user__username", "messages__message_body", "created_at"]
+    filterset_fields  = ["name", "user__username", "Message__message_body", "created_at"]
 
     def perform_create(self, serializer):
        """ Save the serialized data setting the current user as the user who created the conversation"""
@@ -124,7 +124,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serializer = ConversationSerializer(conversations, many=True)
         return Response(serializer.data)
     
-    @action(methods=["get"], detail=False, url_path='messages')
+    @action(methods=["get"], detail=False, url_path='Message')
     def list_msg_with_converstaions(self, request, *args, **kwargs):
         # get all conversation where the current user is part or the participants
         user = request.user
@@ -231,7 +231,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
         conversation_id = kwargs.get("pk")
         strp_conversation_id = conversation_id.strip()
         conversation = get_object_or_404(Conversation, conversation_id=strp_conversation_id, user=request.user)
-        print(conversation)
         serializer = ConversationSerializer(conversation)
         return Response(status=status.HTTP_200_OK, data={
             "success": True,
@@ -251,9 +250,9 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsPaticipantsOfConversation]
     serializer_class = MessageCreate
-    queryset = Messages.objects.all()
+    queryset = Message.objects.all()
     lookup_field = 'pk'
-    pagination_class = [CustomPagination]
+    # pagination_class = [CustomPagination]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["sender__username",  "message_body", "convesation__name"]
 
@@ -301,9 +300,9 @@ class MessageViewSet(viewsets.ModelViewSet):
         try:
             conversation_obj = get_object_or_404(Conversation, conversation_id=strp_conversation_id)
             if request.user in conversation_obj.participants.all():
-                queryset = conversation_obj.messages.all()
+                queryset = conversation_obj.message.all()
             
-                serializer = MessageSerailizer(queryset, many=True)
+                serializer = Messageerailizer(queryset, many=True)
                 return  Response(status=status.HTTP_200_OK, data={"success": True, "result": serializer.data})
         except Exception as e:
             msg += f"error occured: {str(e)}"
@@ -319,7 +318,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         except Exception as e:
             msg = f"Error occured: {e}"
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"success": False, "msg": msg})
-        serializer = MessageSerailizer(message, many=True)
+        serializer = Messageerailizer(message, many=True)
         return Response(status=status.HTTP_200_OK, data={"success": True, "data": serializer.data})
 
 

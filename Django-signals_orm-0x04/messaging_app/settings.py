@@ -99,6 +99,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'messaging_app.wsgi.application'
 
 

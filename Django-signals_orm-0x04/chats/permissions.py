@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import Conversation, Messages
+from .models import Conversation, Message
 
 
 class IsPaticipantsOfConversation(permissions.BasePermission):
@@ -12,7 +12,7 @@ class IsPaticipantsOfConversation(permissions.BasePermission):
     def has_object_permission(self, request, view, obj): 
         if not request.user.is_authenticated:
             return False
-        if isinstance(obj, Messages):
+        if isinstance(obj, Message):
             if request.user in obj.conversation.participants.all():
                 return request.method in ["PUT", "PATCH", "DELETE", "GET"]
         

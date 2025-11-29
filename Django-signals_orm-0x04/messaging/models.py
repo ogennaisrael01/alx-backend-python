@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from django.contrib.auth import get_user_model
+from chats.models import Message
 
 User = get_user_model()
 class Notification(models.Model):
@@ -12,9 +13,9 @@ class Notification(models.Model):
         max_length=20
     )
     content = models.TextField()
-
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name="nofification_message")
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications_sender")
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notification_reciever")
+    receiver = models.ManyToManyField(User, related_name="notification_receivers")
 
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)

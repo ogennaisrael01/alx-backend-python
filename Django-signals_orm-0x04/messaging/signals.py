@@ -1,8 +1,9 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from chats.models import Conversation
+from chats.models import Conversation, Message
 from django.contrib.auth import get_user_model
 import logging
+from .models import Notification
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,3 +19,28 @@ def add_user_to_conversation_signal(sender, instance, created, **kwargs):
            instance.participants.add(user)
     
     logger.info(f"Added {user.username} in the list of participants in a conversation title {instance.name}")
+
+
+
+@receiver(post_save, sender=Message)
+def notify_users_signal(sender, instance, created, **kwargs):
+    " send out notification "
+    if isinstance(instance, Message) and created:
+        participants = instance.conversation.participants.all() # Notify all users inside the conversation when a message is created
+        message = instance.message_body
+        notification = Notification.objects.create(
+                    content = message,
+                    sender=instance.sender,
+                    message=instance        
+        )
+
+        if notification:
+            receivers = notification.receiver.all()
+            for participant in participants:
+                if participant in receivers:
+                    continue
+                notification.receiver.add(participant)
+
+    logger.info(f"{instance.sender.username} sent a message: {instance.message_body}")
+
+

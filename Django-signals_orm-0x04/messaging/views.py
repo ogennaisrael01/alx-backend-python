@@ -13,8 +13,8 @@ def delete_view(request: HttpRequest, pk) -> Response:
     if not pk:
         return Response(status_code=status.HTTP_400_BAD_REQUEST, msg={"success": False, "msg": "ID is required"})
 
-    user_data = get_object_or_404(User, pk=pk)
-    if request.user.email != user_data.email:
+    user = get_object_or_404(User, pk=pk)
+    if request.user.email != user.email:
         return Response(status=status.HTTP_403_FORBIDDEN, data="You can't perform this action")
-    user_data.delete()
+    delete_user = user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)

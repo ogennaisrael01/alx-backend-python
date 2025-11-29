@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.UUID('d44e7fd0-7e41-40db-87b4-490b6dc8ef0f'), primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='messages',
+            model_name='Message',
             name='message_id',
             field=models.UUIDField(db_index=True, default=uuid.UUID('fd068be5-b0d3-4ecb-aa1e-117d6b323daa'), primary_key=True, serialize=False),
         ),

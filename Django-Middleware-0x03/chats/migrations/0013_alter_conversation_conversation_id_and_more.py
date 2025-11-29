@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='messages',
+            model_name='Message',
             name='message_id',
             field=models.UUIDField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
         ),

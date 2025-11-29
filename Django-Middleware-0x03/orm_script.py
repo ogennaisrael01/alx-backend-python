@@ -9,7 +9,7 @@ django.setup()
 
 from django.contrib.auth import get_user_model
 from django.db import connection
-from chats.models import Conversation, Messages
+from chats.models import Conversation, Message
 
 
 User = get_user_model()

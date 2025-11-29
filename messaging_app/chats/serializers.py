@@ -2,7 +2,7 @@ from rest_framework import serializers
 import email_validator
 from django.contrib.auth.password_validation import validate_password as _validate_password
 from django.contrib.auth import get_user_model
-from .models import Conversation, Messages
+from .models import Conversation, Message
 
 User = get_user_model()
 
@@ -32,10 +32,10 @@ class ResgisterSerializer(serializers.Serializer):
         return user
     
 
-class MessageSerailizer(serializers.ModelSerializer):
+class Messageerailizer(serializers.ModelSerializer):
     sender = serializers.ReadOnlyField(source="sender.username")
     class Meta:
-        model = Messages
+        model = Message
         fields = [
             'message_id', 
             "sender", 
@@ -45,7 +45,7 @@ class MessageSerailizer(serializers.ModelSerializer):
 
     
 class ConversationCreateSerailizer(serializers.Serializer):
-    name = serializers.CharField(max_length=500, error_messages={
+    name = serializers.CharField(max_length=500, error_Message={
         "blank": "conversation name connaot be blank",
         "required": "name is required"
     })
@@ -75,7 +75,7 @@ class ConversationCreateSerailizer(serializers.Serializer):
 
 class ConversationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.username")
-    messages = MessageSerailizer(many=True, read_only=True)
+    Message = Messageerailizer(many=True, read_only=True)
     participants_names = serializers.SerializerMethodField()
     last_msg = serializers.SerializerMethodField()
     class Meta:
@@ -87,7 +87,7 @@ class ConversationSerializer(serializers.ModelSerializer):
             "user", 
             "participants", 
             "created_at", 
-            "messages", 
+            "Message", 
             "participants_names", 
             "last_msg"
             ]
@@ -97,7 +97,7 @@ class ConversationSerializer(serializers.ModelSerializer):
         return names
     
     def get_last_msg(self, obj):
-        last_msg = obj.messages.first()
+        last_msg = obj.Message.first()
         if last_msg:
             return {""
                 "sender": last_msg.sender.username,
@@ -108,7 +108,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 class MessageCreate(serializers.Serializer):
     message_body = serializers.CharField(max_length=500, 
-                                         error_messages={
+                                         error_Message={
                                              "blank": "Message cannot be blank", 
                                              "required": "message body id required to send to a message"
                                              }
@@ -119,7 +119,7 @@ class MessageCreate(serializers.Serializer):
         return value
 
     def create(self, validated_data):
-        message = Messages.objects.create(**validated_data)
+        message = Message.objects.create(**validated_data)
         return message
     
     def update(self, instance, validated_data):

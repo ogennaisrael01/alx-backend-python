@@ -121,22 +121,22 @@ class Conversation(models.Model):
         return f"{self.user.username} == Created by === {self.name}"
 
 
-class Messages(models.Model):
+class Message(models.Model):
     message_id = models.UUIDField(
         max_length=20, 
         primary_key=True,
         default=uuid.uuid4,
         db_index=True)
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="messages")
-    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="messages")
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="Message")
+    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="Message")
     message_body = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "messages"
-        verbose_name = "Messages"
+        db_table = "Message"
+        verbose_name = "Message"
         ordering = ["-created_at"]
     
     def __str__(self):

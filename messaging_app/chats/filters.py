@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from .models import Messages
+from .models import Message
 
 
 
@@ -9,7 +9,7 @@ class MesssageFilter(filters.FilterSet):
         label="sent_at"
     )
     class Meta:
-        model = Messages
+        model = Message
         fields = [
             "date_filter",
         ]

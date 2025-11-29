@@ -38,12 +38,12 @@ class RestrictAccessByTimeMiddleware:
         """ Restrict access the these urls
             - [
             '/api/v1/conversations/,
-            'api/v1/conversations/messages/'
+            'api/v1/conversations/Message/'
         ]
         """
         restricted_paths = [
             '/api/v1/conversations/',
-            '/api/v1/conversations/messages/'
+            '/api/v1/conversations/Message/'
         ]
   
         if self.date > 21 or self.date < 17 and request.path in restricted_paths:
@@ -77,7 +77,7 @@ class OffensiveLanguageMiddleware :
                     message_count = len(self.cache[ip_address]["time_frames"])
                     if message_count >= self.max_message:
                         raise  PermissionDenied(
-                            detail="Maximum alloed messages exceede: number of message allowed: {self.max_message}, message_sent: {message_Count}",
+                            detail="Maximum alloed Message exceede: number of message allowed: {self.max_message}, message_sent: {message_Count}",
                             code=status.HTTP_403_FORBIDDEN)
             self.cache[ip_address]["time_frames"].append(current_date)
         response = self.get_response(request)

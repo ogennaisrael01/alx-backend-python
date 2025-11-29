@@ -13,16 +13,16 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='messages',
-            options={'ordering': ['-created_at'], 'verbose_name': 'Messages'},
+            name='Message',
+            options={'ordering': ['-created_at'], 'verbose_name': 'Message'},
         ),
         migrations.RenameField(
-            model_name='messages',
+            model_name='Message',
             old_name='message',
             new_name='message_body',
         ),
         migrations.AddField(
-            model_name='messages',
+            model_name='Message',
             name='sent_at',
             field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.UUID('f5a99fa8-28d5-438d-8edf-30183f4cea19'), primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='messages',
+            model_name='Message',
             name='message_id',
             field=models.UUIDField(db_index=True, default=uuid.UUID('56fabe73-404e-43ef-bbc1-aeb5b6ca3fc5'), primary_key=True, serialize=False),
         ),

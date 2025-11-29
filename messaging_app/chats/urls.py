@@ -8,9 +8,9 @@ from .auth import CustomTokenView
 router = routers.DefaultRouter()
 router.register(r'conversations', ConversationViewSet, basename="conversation")
 
-# Nested router connecting conversation to messages
+# Nested router connecting conversation to Message
 conversation_router = routers.NestedDefaultRouter(router, r'conversations', lookup="conversation")
-conversation_router.register(r'messages', MessageViewSet, basename="message")
+conversation_router.register(r'Message', MessageViewSet, basename="message")
 
 urlpatterns = [
     path("register/", EmailAuthApi.as_view(), name="register"),

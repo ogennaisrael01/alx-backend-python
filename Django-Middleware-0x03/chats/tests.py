@@ -30,7 +30,7 @@ class MiddlewareTestCases(TestCase):
             "name": self.faker.sentence()[:20],
             "description": self.faker.sentences()
         }
-        # make request to exceed maximum allowed messages
+        # make request to exceed maximum allowed Message
         for _ in range(10):
             response = self.client.post(self.endpoint, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

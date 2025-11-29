@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chats', '0010_alter_messages_options_and_more'),
+        ('chats', '0010_alter_Message_options_and_more'),
     ]
 
     operations = [
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.UUID('69ef6928-1833-4e96-92eb-7de2e681cad1'), primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='messages',
+            model_name='Message',
             name='message_id',
             field=models.UUIDField(db_index=True, default=uuid.UUID('e15ea25a-38be-4b72-a774-0b7709afc92c'), primary_key=True, serialize=False),
         ),

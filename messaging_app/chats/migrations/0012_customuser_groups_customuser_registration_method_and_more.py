@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
             field=models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status'),
         ),
         migrations.AlterField(
-            model_name='messages',
+            model_name='Message',
             name='message_id',
             field=models.UUIDField(db_index=True, default=uuid.UUID('a0a1c90f-a0ac-409a-b4be-ce048b3d8bfb'), primary_key=True, serialize=False),
         ),

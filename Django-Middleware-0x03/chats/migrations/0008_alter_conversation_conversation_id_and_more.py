@@ -24,18 +24,18 @@ class Migration(migrations.Migration):
             field=models.UUIDField(default=uuid.UUID('1a0cc5b2-e9f6-4e79-bfc9-ca5466f0a4bd'), primary_key=True, serialize=False),
         ),
         migrations.CreateModel(
-            name='Messages',
+            name='Message',
             fields=[
                 ('message_id', models.UUIDField(db_index=True, default=uuid.UUID('d868f835-e118-4657-9cc5-7b1b34180501'), primary_key=True, serialize=False)),
                 ('message', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('conversation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='chats.conversation')),
-                ('sender', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to=settings.AUTH_USER_MODEL)),
+                ('conversation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Message', to='chats.conversation')),
+                ('sender', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Message', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name': 'Messages',
-                'db_table': 'messages',
+                'verbose_name': 'Message',
+                'db_table': 'Message',
             },
         ),
     ]

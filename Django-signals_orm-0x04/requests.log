@@ -482,3 +482,53 @@
 29-November-2025 14:26:01 - User: AnonymousUser - Path: /__debug__/history_sidebar/ 
 29-November-2025 14:26:09 - User: AnonymousUser - Path: /api/v1/delete/account/5be52f55-1ea3-403c-a06d-b88500d86710/ 
 29-November-2025 14:26:31 - User: AnonymousUser - Path: /api/v1/delete/account/5be52f55-1ea3-403c-a06d-b88500d86710/ 
+29-November-2025 15:13:34 - User: AnonymousUser - Path: /api/v1/delete/account/5be52f55-1ea3-403c-a06d-b88500d86710/ 
+29-November-2025 15:14:10 - User: AnonymousUser - Path: /api/v1/delete/account/5be52f55-1ea3-403c-a06d-b88500d86710/ 
+29-November-2025 15:14:58 - User: AnonymousUser - Path: /api/v1/conversation/fd79276f-a643-454d-9f3b-cc18752fcf27/message/<message_pk>/reply 
+29-November-2025 15:14:58 - User: AnonymousUser - Path: /api/v1/conversation/fd79276f-a643-454d-9f3b-cc18752fcf27/message/<message_pk>/reply 
+29-November-2025 15:15:25 - User: AnonymousUser - Path: /api/v1/conversation/fd79276f-a643-454d-9f3b-cc18752fcf27/message/3393938494993/reply 
+29-November-2025 15:15:25 - User: AnonymousUser - Path: /api/v1/conversation/fd79276f-a643-454d-9f3b-cc18752fcf27/message/3393938494993/reply 
+29-November-2025 15:15:56 - User: AnonymousUser - Path: /api/v1/conversation/fd79276f-a643-454d-9f3b-cc18752fcf27/message/3393938494993/reply 
+29-November-2025 15:15:59 - User: AnonymousUser - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:34:21 - User: AnonymousUser - Path: /api/v1/conversation/fd79276f-a643-454d-9f3b-cc18752fcf27/message/ 
+29-November-2025 15:34:29 - User: AnonymousUser - Path: /api/v1/conversations/fd79276f-a643-454d-9f3b-cc18752fcf27/message/ 
+29-November-2025 15:34:29 - User: AnonymousUser - Path: /api/v1/conversations/fd79276f-a643-454d-9f3b-cc18752fcf27/message/ 
+29-November-2025 15:35:01 - User: AnonymousUser - Path: /api/v1/conversations/fd79276f-a643-454d-9f3b-cc18752fcf27/messages/ 
+29-November-2025 15:35:13 - User: AnonymousUser - Path: /docs/ 
+29-November-2025 15:35:15 - User: AnonymousUser - Path: /docs/ 
+29-November-2025 15:35:16 - User: AnonymousUser - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:36:07 - User: AnonymousUser - Path: /api/v1/conversations/fd79276f-a643-454d-9f3b-cc18752fcf27/message/ 
+29-November-2025 15:36:13 - User: AnonymousUser - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:37:45 - User: AnonymousUser - Path: /api/v1/conversations/ 
+29-November-2025 15:37:48 - User: AnonymousUser - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:37:57 - User: AnonymousUser - Path: /accounts/login/ 
+29-November-2025 15:38:06 - User: AnonymousUser - Path: / 
+29-November-2025 15:38:14 - User: AnonymousUser - Path: /login 
+29-November-2025 15:38:14 - User: AnonymousUser - Path: /login/ 
+29-November-2025 15:38:45 - User: AnonymousUser - Path: /login/ 
+29-November-2025 15:38:48 - User: john.doe@gmail.com ==== HOST - Path: /accounts/profile/ 
+29-November-2025 15:38:58 - User: john.doe@gmail.com ==== HOST - Path: /docs/ 
+29-November-2025 15:38:59 - User: john.doe@gmail.com ==== HOST - Path: /docs/ 
+29-November-2025 15:39:01 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:39:22 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/ 
+29-November-2025 15:39:23 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:40:43 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/62cb562b-2187-4be7-acda-2de3b346ef66/message/ 
+29-November-2025 15:40:46 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:43:06 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversation/62cb562b-2187-4be7-acda-2de3b346ef66/message/60599db8-8abd-47dc-97dd-951dd2f7045d/reply 
+29-November-2025 15:43:07 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:44:10 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversation/62cb562b-2187-4be7-acda-2de3b346ef66/message/60599db8-8abd-47dc-97dd-951dd2f7045d/reply 
+29-November-2025 15:45:03 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversation/62cb562b-2187-4be7-acda-2de3b346ef66/message/60599db8-8abd-47dc-97dd-951dd2f7045d/reply 
+29-November-2025 15:45:05 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:51:29 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/62cb562b-2187-4be7-acda-2de3b346ef66/message/60599db8-8abd-47dc-97dd-951dd2f7045d/ 
+29-November-2025 15:51:34 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:53:46 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/62cb562b-2187-4be7-acda-2de3b346ef66/message/60599db8-8abd-47dc-97dd-951dd2f7045d/ 
+29-November-2025 15:53:48 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:54:12 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/62cb562b-2187-4be7-acda-2de3b346ef66/message/60599db8-8abd-47dc-97dd-951dd2f7045d/ 
+29-November-2025 15:54:13 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 15:56:20 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/62cb562b-2187-4be7-acda-2de3b346ef66/message/14b03d09-6e68-435e-bcea-d4979ef00721/ 
+29-November-2025 15:56:20 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 16:13:33 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/62cb562b-2187-4be7-acda-2de3b346ef66/message/ 
+29-November-2025 16:13:34 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 16:14:06 - User: john.doe@gmail.com ==== HOST - Path: /api/v1/conversations/62cb562b-2187-4be7-acda-2de3b346ef66/message/ 
+29-November-2025 16:14:06 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/history_sidebar/ 
+29-November-2025 16:14:29 - User: john.doe@gmail.com ==== HOST - Path: /__debug__/render_panel/ 

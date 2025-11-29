@@ -35,6 +35,7 @@ class ResgisterSerializer(serializers.Serializer):
 class Messageerailizer(serializers.ModelSerializer):
     sender = serializers.ReadOnlyField(source="sender.username")
     message_histories = serializers.SerializerMethodField()
+    nested_messages = serializers.SerializerMethodField()
     class Meta:
         model = Message
         fields = [
@@ -43,7 +44,8 @@ class Messageerailizer(serializers.ModelSerializer):
             "message_body", 
             "sent_at",
             "edited",
-            "message_histories"
+            "message_histories",
+            "nested_messages"
             ]
 
     def get_message_histories(self, obj):
@@ -52,6 +54,13 @@ class Messageerailizer(serializers.ModelSerializer):
             return {
                 "current_message": history.message.message_body,
                 "previous_message": history.message_body_history
+            }
+    def get_nested_messages(self, obj):
+        nested_messages = obj.replies.all()
+        for message in nested_messages:
+            return {
+                "message": message.message_body,
+                "sender": message.sender.username
             }
 
     

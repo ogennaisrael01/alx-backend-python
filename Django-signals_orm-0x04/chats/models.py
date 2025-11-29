@@ -130,6 +130,7 @@ class Message(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="message")
     sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="message")
     message_body = models.TextField()
+    parent_message = models.ForeignKey("self", on_delete=models.CASCADE, related_name="replies", null=True, blank=True)
     sent_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

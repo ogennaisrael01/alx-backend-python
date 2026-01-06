@@ -45,7 +45,7 @@ class Messageerailizer(serializers.ModelSerializer):
 
     
 class ConversationCreateSerailizer(serializers.Serializer):
-    name = serializers.CharField(max_length=500, error_Message={
+    name = serializers.CharField(max_length=500, error_messages={
         "blank": "conversation name connaot be blank",
         "required": "name is required"
     })
@@ -108,7 +108,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 class MessageCreate(serializers.Serializer):
     message_body = serializers.CharField(max_length=500, 
-                                         error_Message={
+                                         error_messages={
                                              "blank": "Message cannot be blank", 
                                              "required": "message body id required to send to a message"
                                              }

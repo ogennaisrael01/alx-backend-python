@@ -20,4 +20,3 @@ urlpatterns = [
     path('', include(router.urls)),
 
 ]
-n

@@ -10,8 +10,8 @@ env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # GOOGLE CONFIG
-GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
-GOOGLE_CLIENT_SECRET_KEY = env("GOOGLE_CLIENT_SECRET_KEY")
+#GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+#GOOGLE_CLIENT_SECRET_KEY = env("GOOGLE_CLIENT_SECRET_KEY")
 
 
 SECRET_KEY = env("SECRET_KEY")
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.Message',
+    'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
     'drf_yasg',
@@ -73,7 +73,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.Message.middleware.MessageMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -88,7 +88,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.Message.context_processors.Message',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -102,10 +102,10 @@ WSGI_APPLICATION = 'messaging_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': env("database_name"),
         'USER': env("database_user"),
-        'PASSWORD': env.int("database_password")
+        'PASSWORD': env("database_password")
     }
 }
 

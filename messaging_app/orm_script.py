@@ -10,14 +10,13 @@ django.setup()
 from django.contrib.auth import get_user_model
 from django.db import connection
 from chats.models import Conversation, Message
+from django.core.management.utils import get_random_secret_key
 
 
 User = get_user_model()
-def run():
-    user = User.objects.get(email="ogennaisrael98@gmail.com")
-    print(user)
 
-    print(connection.queries)
+def run():
+   print(get_random_secret_key())
   
 
 

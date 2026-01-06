@@ -1,0 +1,34 @@
+version: "3.9"
+
+
+services: 
+  db:
+    image: mysql:9.5.0
+    environment:
+      MYSQL_USER: ${database_user}
+      MYSQL_DB: ${database_name}
+      MYSQL_PASSWORD: ${database_password}
+
+    restart: unless-stopped
+
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/mysql
+  
+  web:
+    build: .
+    container_name: messaging_app
+    env_file:
+      - .env
+
+    restart: unless-stopped
+
+    volumes:
+      - .:/app
+    command: ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+    
+
+
+volumes:
+  db_data:
